@@ -20,17 +20,17 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 - [x] T11 `server/GoalRoom.luau`: Sala 214 no centro/fim, porta final marcada
 
 ## Fase 2 — Guarda (dep.: T08)
-- [ ] T12 `server/Guard/Spawn.luau`: NPC guarda (Humanoid) na zona 1
-- [ ] T13 `Guard/Patrol.luau`: waypoints nos cruzamentos, PathfindingService
-- [ ] T14 `Guard/Vision.luau`: cone de visão + raycast (parede bloqueia)
-- [ ] T15 `Guard/StateMachine.luau`: Patrulha → Suspeito → Perseguição → Busca (vai ao último ponto visto)
-- [ ] T16 `Guard/Chase.luau`: perseguição contínua, recalcula caminho, velocidade um pouco abaixo da do jogador
-- [ ] T17 `server/Capture.luau`: capturado = volta ao checkpoint + guarda reinicia patrulha (sem game over duro)
-- [ ] T18 `server/HideSpots.luau`: armários/caixas; esconder quebra a visão e baixa o alerta
-- [ ] T19 `client/AlertHUD.luau`: barra de alerta do guarda (calmo/suspeito/perseguição)
+- [x] T12 `server/Guard/Spawn.luau`: NPC guarda (Humanoid) na zona 1
+- [x] T13 `Guard/Patrol.luau`: waypoints nos cruzamentos, PathfindingService
+- [x] T14 `Guard/Vision.luau`: cone de visão + raycast (parede bloqueia)
+- [x] T15 `Guard/StateMachine.luau`: Patrulha → Suspeito → Perseguição → Busca (vai ao último ponto visto)
+- [x] T16 `Guard/Chase.luau`: perseguição contínua, recalcula caminho, velocidade um pouco abaixo da do jogador
+- [x] T17 `server/Capture.luau`: capturado = volta ao checkpoint + guarda reinicia patrulha (sem game over duro)
+- [x] T18 `server/HideSpots.luau`: armários/caixas; esconder quebra a visão e baixa o alerta
+- [x] T19 `client/AlertHUD.luau`: barra de alerta do guarda (calmo/suspeito/perseguição)
 
 ## Fase 3 — Obstáculos (dep.: T08, T05)
-- [ ] T20 `server/Interact.luau`: base com ProximityPrompt (valida distância no servidor)
+- [x] T20 `server/Interact.luau`: base com ProximityPrompt (valida distância no servidor)
 - [ ] T21 `Obstacles/LockedDoor.luau` + chaves por cor
 - [ ] T22 `Obstacles/Lever.luau`: alavanca abre portão em outro ponto do mapa
 - [ ] T23 `Obstacles/FallingFloor.luau`: piso temporário que cai e volta
