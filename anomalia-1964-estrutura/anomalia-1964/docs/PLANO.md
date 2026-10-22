@@ -5,7 +5,7 @@ Conceito: escape em labirinto gigante (Ministério, Brasília, abril/1964). Cheg
 Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por código (Codex não edita .rbxl) · `--!strict` · `task.wait()`.
 
 ## Fase 0 — Base
-- [ ] T01 AGENTS.md + docs/PLANO.md + docs/tarefas/ (modelo de ficha)
+- [x] T01 AGENTS.md + docs/PLANO.md + docs/tarefas/ (modelo de ficha)
 - [ ] T02 `default.project.json` (Rojo), pastas `src/server`, `src/client`, `src/shared`
 - [ ] T03 stylua.toml, selene.toml, wally/aftman (se usar)
 - [ ] T04 `shared/Config.luau` (tamanho da célula, velocidades, tempos, nº de zonas)
