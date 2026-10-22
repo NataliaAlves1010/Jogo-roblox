@@ -18,12 +18,19 @@ local config = {
         Range = 96,
         FieldOfViewDegrees = 90,
     },
+    Obstacles = {
+        LightBeamHeight = 8,
+        LightBeamThickness = 0.5,
+        LightBeamWidth = 1.5,
+    },
     Timing = {
         GuardRepathInterval = 1,
         GuardSearchDuration = 8,
         CaptureRespawnDelay = 2,
         FallingFloorDelay = 0.35,
         FallingFloorDuration = 4,
+        LightBeamActiveDuration = 3,
+        LightBeamSafeDuration = 2,
     },
     Zones = {
         Count = 4,
