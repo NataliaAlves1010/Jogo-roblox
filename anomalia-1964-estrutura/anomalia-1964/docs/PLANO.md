@@ -24,7 +24,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 - [x] T13 `Guard/Patrol.luau`: waypoints nos cruzamentos, PathfindingService
 - [x] T14 `Guard/Vision.luau`: cone de visão + raycast (parede bloqueia)
 - [x] T15 `Guard/StateMachine.luau`: Patrulha → Suspeito → Perseguição → Busca (vai ao último ponto visto)
-- [ ] T16 `Guard/Chase.luau`: perseguição contínua, recalcula caminho, velocidade um pouco abaixo da do jogador
+- [x] T16 `Guard/Chase.luau`: perseguição contínua, recalcula caminho, velocidade um pouco abaixo da do jogador
 - [ ] T17 `server/Capture.luau`: capturado = volta ao checkpoint + guarda reinicia patrulha (sem game over duro)
 - [ ] T18 `server/HideSpots.luau`: armários/caixas; esconder quebra a visão e baixa o alerta
 - [ ] T19 `client/AlertHUD.luau`: barra de alerta do guarda (calmo/suspeito/perseguição)
