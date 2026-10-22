@@ -22,6 +22,8 @@ local config = {
         GuardRepathInterval = 1,
         GuardSearchDuration = 8,
         CaptureRespawnDelay = 2,
+        FallingFloorDelay = 0.35,
+        FallingFloorDuration = 4,
     },
     Zones = {
         Count = 4,
