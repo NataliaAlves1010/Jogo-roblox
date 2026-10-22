@@ -20,6 +20,7 @@ local captureModule = serverFolder:WaitForChild("Capture") :: ModuleScript
 local inventoryModule = serverFolder:WaitForChild("Inventory") :: ModuleScript
 local cluesModule = serverFolder:WaitForChild("Clues") :: ModuleScript
 local janitorModule = serverFolder:WaitForChild("Janitor") :: ModuleScript
+local progressModule = serverFolder:WaitForChild("Progress") :: ModuleScript
 local spawnModule = guardFolder:WaitForChild("Spawn") :: ModuleScript
 local patrolModule = guardFolder:WaitForChild("Patrol") :: ModuleScript
 local visionModule = guardFolder:WaitForChild("Vision") :: ModuleScript
@@ -38,6 +39,7 @@ local Capture = require(captureModule)
 local Inventory = require(inventoryModule)
 local Clues = require(cluesModule)
 local Janitor = require(janitorModule)
+local Progress = require(progressModule)
 local GuardSpawn = require(spawnModule)
 local Patrol = require(patrolModule)
 local Vision = require(visionModule)
@@ -62,7 +64,8 @@ local function montarMapa(): (Folder, { Zones.Zona })
     local grade = MazeGenerator.gerar(Config.Maze.Rows, Config.Maze.Columns, Config.Maze.Seed)
     local mapa = MazeBuilder.construir(grade, workspace)
     local zonas = Zones.criar(mapa, grade)
-    GoalRoom.criar(mapa, grade)
+    local sala = GoalRoom.criar(mapa, grade)
+    Progress.inicializar(sala)
 
     return mapa, zonas
 end

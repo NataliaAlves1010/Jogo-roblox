@@ -43,6 +43,11 @@ local config = {
     Zones = {
         Count = 4,
     },
+    Progress = {
+        RequiredKeys = { "chave_gabinete" },
+        MinimumClues = 5,
+        InteractionDistance = 10,
+    },
 }
 
 export type Config = typeof(config)

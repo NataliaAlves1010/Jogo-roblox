@@ -145,6 +145,7 @@ function GoalRoom.criar(mapa: Folder, grade: Grade): Model
     )
     porta:SetAttribute("PortaFinal", true)
     porta:SetAttribute("SalaFinal", "Sala 214")
+    porta:SetAttribute("ProgressaoValidadaPeloServidor", false)
     modelo.PrimaryPart = porta
     modelo.Parent = mapa
 
