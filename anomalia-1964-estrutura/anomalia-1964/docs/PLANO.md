@@ -9,7 +9,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 - [x] T02 `default.project.json` (Rojo), pastas `src/server`, `src/client`, `src/shared`
 - [x] T03 stylua.toml, selene.toml, wally/aftman (se usar)
 - [x] T04 `shared/Config.luau` (tamanho da célula, velocidades, tempos, nº de zonas)
-- [ ] T05 `shared/Types.luau` e `shared/Remotes.luau` (RemoteEvents criados pelo servidor)
+- [x] T05 `shared/Types.luau` e `shared/Remotes.luau` (RemoteEvents criados pelo servidor)
 
 ## Fase 1 — Labirinto (dep.: F0)
 - [ ] T06 `shared/MazeGrid.luau`: grade NxM, paredes por célula, seed fixa
