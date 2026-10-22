@@ -23,6 +23,9 @@ function Vision.detectar(guarda: Model, jogador: Player): boolean
     if personagem == nil then
         return false
     end
+    if jogador:GetAttribute("DentroDoDuto") == true or personagem:GetAttribute("DentroDoDuto") == true then
+        return false
+    end
 
     local humanoideGuarda = guarda:FindFirstChildOfClass("Humanoid")
     local raizGuarda = guarda:FindFirstChild("HumanoidRootPart")

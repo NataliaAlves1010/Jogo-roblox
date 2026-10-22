@@ -35,7 +35,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 - [x] T22 `Obstacles/Lever.luau`: alavanca abre portão em outro ponto do mapa
 - [x] T23 `Obstacles/FallingFloor.luau`: piso temporário que cai e volta
 - [x] T24 `Obstacles/LightBeam.luau`: feixe de luz/câmera com ritmo; atravessar só no intervalo
-- [ ] T25 `Obstacles/Vent.luau`: duto de atalho (agachado, mais lento, guarda não segue)
+- [x] T25 `Obstacles/Vent.luau`: duto de atalho (agachado, mais lento, guarda não segue)
 - [ ] T26 `server/ObstaclePlacer.luau`: distribui obstáculos por zona, garantindo que o caminho até a chave continua possível (validar com BFS)
 
 ## Fase 4 — Pistas e Faxineira (dep.: T20)
