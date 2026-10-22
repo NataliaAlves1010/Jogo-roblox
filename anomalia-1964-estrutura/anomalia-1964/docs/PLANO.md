@@ -12,7 +12,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 - [x] T05 `shared/Types.luau` e `shared/Remotes.luau` (RemoteEvents criados pelo servidor)
 
 ## Fase 1 — Labirinto (dep.: F0)
-- [ ] T06 `shared/MazeGrid.luau`: grade NxM, paredes por célula, seed fixa
+- [x] T06 `shared/MazeGrid.luau`: grade NxM, paredes por célula, seed fixa
 - [ ] T07 `server/MazeGenerator.luau`: DFS/backtracker + loops extras (evita só-um-caminho)
 - [ ] T08 `server/MazeBuilder.luau`: transforma a grade em Parts (piso, paredes, teto) numa Folder
 - [ ] T09 `server/Zones.luau`: divide em 4 zonas (Recepção, Arquivo, Subsolo, Gabinete) com cor/iluminação própria
