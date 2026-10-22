@@ -21,7 +21,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 
 ## Fase 2 — Guarda (dep.: T08)
 - [x] T12 `server/Guard/Spawn.luau`: NPC guarda (Humanoid) na zona 1
-- [ ] T13 `Guard/Patrol.luau`: waypoints nos cruzamentos, PathfindingService
+- [x] T13 `Guard/Patrol.luau`: waypoints nos cruzamentos, PathfindingService
 - [ ] T14 `Guard/Vision.luau`: cone de visão + raycast (parede bloqueia)
 - [ ] T15 `Guard/StateMachine.luau`: Patrulha → Suspeito → Perseguição → Busca (vai ao último ponto visto)
 - [ ] T16 `Guard/Chase.luau`: perseguição contínua, recalcula caminho, velocidade um pouco abaixo da do jogador
