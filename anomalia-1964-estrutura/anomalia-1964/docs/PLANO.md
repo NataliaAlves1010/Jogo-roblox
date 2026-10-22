@@ -31,7 +31,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 
 ## Fase 3 — Obstáculos (dep.: T08, T05)
 - [ ] T20 `server/Interact.luau`: base com ProximityPrompt (valida distância no servidor)
-- [ ] T21 `Obstacles/LockedDoor.luau` + chaves por cor
+- [x] T21 `Obstacles/LockedDoor.luau` + chaves por cor
 - [ ] T22 `Obstacles/Lever.luau`: alavanca abre portão em outro ponto do mapa
 - [ ] T23 `Obstacles/FallingFloor.luau`: piso temporário que cai e volta
 - [ ] T24 `Obstacles/LightBeam.luau`: feixe de luz/câmera com ritmo; atravessar só no intervalo
