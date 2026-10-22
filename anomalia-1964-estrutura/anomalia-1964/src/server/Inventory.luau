@@ -111,6 +111,10 @@ function Inventory.temChave(jogador: Player, id: string): boolean
 end
 
 function Inventory.temPista(jogador: Player, id: string): boolean
+    if id == "" or jogador.Parent ~= Players then
+        return false
+    end
+
     local estado = estadosPorJogador[jogador.UserId]
     return if estado == nil then false else estado.Pistas[id] == true
 end

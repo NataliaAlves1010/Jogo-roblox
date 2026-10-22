@@ -32,6 +32,9 @@ local NOMES_ZONAS: { [string]: boolean } = {
     Gabinete = true,
 }
 
+local PISTA_RECOMPENSA = "registro_plantao"
+local CHAVE_RECOMPENSA = "chave_gabinete"
+
 local function criarParte(modelo: Model, nome: string, tamanho: Vector3, posicao: Vector3, cor: Color3): BasePart
     local parte = Instance.new("Part")
     parte.Name = nome
@@ -93,6 +96,19 @@ local function criarFaxineira(zona: Zona): Model
     return modelo
 end
 
+function Janitor.recompensar(jogador: Player, faxineira: Model): boolean
+    local corpo = faxineira:FindFirstChild("Corpo")
+    if corpo == nil or not corpo:IsA("BasePart") or not Interact.distanciaValida(jogador, corpo) then
+        return false
+    end
+
+    if not Inventory.temPista(jogador, PISTA_RECOMPENSA) or Inventory.temChave(jogador, CHAVE_RECOMPENSA) then
+        return false
+    end
+
+    return Inventory.adicionarChave(jogador, CHAVE_RECOMPENSA)
+end
+
 function Janitor.conversar(jogador: Player, faxineira: Model): boolean
     local corpo = faxineira:FindFirstChild("Corpo")
     local zona = faxineira:GetAttribute("Zona")
@@ -111,8 +127,22 @@ function Janitor.conversar(jogador: Player, faxineira: Model): boolean
         return false
     end
 
-    local inventario = Inventory.obter(jogador)
-    local fala = DialogueData.obterFala(zona :: NomeZona, inventario.Pistas)
+    local fala: DialogueData.Fala
+    if Janitor.recompensar(jogador, faxineira) then
+        fala = DialogueData.obterConfirmacaoRecompensa()
+    else
+        local pistas = Inventory.obter(jogador).Pistas
+        if Inventory.temChave(jogador, CHAVE_RECOMPENSA) then
+            for indice, id in pistas do
+                if id == PISTA_RECOMPENSA then
+                    table.remove(pistas, indice)
+                    break
+                end
+            end
+        end
+        fala = DialogueData.obterFala(zona :: NomeZona, pistas)
+    end
+
     remoto:FireClient(jogador, fala)
     return true
 end

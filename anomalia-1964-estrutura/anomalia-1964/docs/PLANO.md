@@ -45,7 +45,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 - [x] T30 `shared/DialogueData.luau`: falas da faxineira (dica por zona, reação a pistas já achadas)
 - [x] T31 `server/Janitor.luau`: NPC com prompt de conversa, uma por zona ou itinerante
 - [x] T32 `client/DialogueUI.luau`: caixa de diálogo (nome, texto digitando, botões de escolha)
-- [ ] T33 Faxineira entrega 1 chave/pista quando o jogador traz um item específico
+- [x] T33 Faxineira entrega 1 chave/pista quando o jogador traz um item específico
 
 ## Fase 5 — Fechamento
 - [ ] T34 `server/Progress.luau`: porta da Sala 214 exige as chaves + mínimo de pistas

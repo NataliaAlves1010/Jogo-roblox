@@ -29,7 +29,7 @@ local dialogos: { [NomeZona]: DialogoZona } = {
     Arquivo = {
         Base = "Os arquivos foram mexidos durante a noite. Procure os papéis que saíram do lugar.",
         Pistas = {
-            registro_plantao = "Conheço esse registro. A chave do Gabinete ficou comigo por segurança.",
+            registro_plantao = "Esse registro confirma que alguém mexeu nos arquivos depois do expediente.",
             memorando_214 = "Se o memorando cita a Sala 214, confira os documentos guardados no Gabinete.",
         },
     },
@@ -76,6 +76,14 @@ function DialogueData.obterFala(zona: NomeZona, pistas: { string }): Fala
     return {
         Nome = "Faxineira",
         Texto = texto,
+        Escolhas = table.clone(ESCOLHAS),
+    }
+end
+
+function DialogueData.obterConfirmacaoRecompensa(): Fala
+    return {
+        Nome = "Faxineira",
+        Texto = "Você encontrou o registro do plantão. Pode ficar com a chave do Gabinete.",
         Escolhas = table.clone(ESCOLHAS),
     }
 end
