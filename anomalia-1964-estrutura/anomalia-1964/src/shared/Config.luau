@@ -4,6 +4,7 @@ local config = {
     Maze = {
         Rows = 31,
         Columns = 31,
+        Seed = 1964,
         CellSize = 24,
         WallHeight = 18,
         WallThickness = 2,
