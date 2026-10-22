@@ -30,7 +30,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 - [x] T19 `client/AlertHUD.luau`: barra de alerta do guarda (calmo/suspeito/perseguição)
 
 ## Fase 3 — Obstáculos (dep.: T08, T05)
-- [ ] T20 `server/Interact.luau`: base com ProximityPrompt (valida distância no servidor)
+- [x] T20 `server/Interact.luau`: base com ProximityPrompt (valida distância no servidor)
 - [ ] T21 `Obstacles/LockedDoor.luau` + chaves por cor
 - [ ] T22 `Obstacles/Lever.luau`: alavanca abre portão em outro ponto do mapa
 - [ ] T23 `Obstacles/FallingFloor.luau`: piso temporário que cai e volta
