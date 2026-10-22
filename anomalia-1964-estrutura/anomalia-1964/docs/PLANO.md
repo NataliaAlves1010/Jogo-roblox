@@ -43,7 +43,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 - [x] T28 `server/Inventory.luau`: chaves e pistas por jogador (servidor é a fonte da verdade)
 - [x] T29 `client/InventoryUI.luau` + diário de pistas
 - [x] T30 `shared/DialogueData.luau`: falas da faxineira (dica por zona, reação a pistas já achadas)
-- [ ] T31 `server/Janitor.luau`: NPC com prompt de conversa, uma por zona ou itinerante
+- [x] T31 `server/Janitor.luau`: NPC com prompt de conversa, uma por zona ou itinerante
 - [ ] T32 `client/DialogueUI.luau`: caixa de diálogo (nome, texto digitando, botões de escolha)
 - [ ] T33 Faxineira entrega 1 chave/pista quando o jogador traz um item específico
 

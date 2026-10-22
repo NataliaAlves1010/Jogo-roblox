@@ -19,6 +19,7 @@ local hideSpotsModule = serverFolder:WaitForChild("HideSpots") :: ModuleScript
 local captureModule = serverFolder:WaitForChild("Capture") :: ModuleScript
 local inventoryModule = serverFolder:WaitForChild("Inventory") :: ModuleScript
 local cluesModule = serverFolder:WaitForChild("Clues") :: ModuleScript
+local janitorModule = serverFolder:WaitForChild("Janitor") :: ModuleScript
 local spawnModule = guardFolder:WaitForChild("Spawn") :: ModuleScript
 local patrolModule = guardFolder:WaitForChild("Patrol") :: ModuleScript
 local visionModule = guardFolder:WaitForChild("Vision") :: ModuleScript
@@ -36,6 +37,7 @@ local HideSpots = require(hideSpotsModule)
 local Capture = require(captureModule)
 local Inventory = require(inventoryModule)
 local Clues = require(cluesModule)
+local Janitor = require(janitorModule)
 local GuardSpawn = require(spawnModule)
 local Patrol = require(patrolModule)
 local Vision = require(visionModule)
@@ -228,6 +230,7 @@ HideSpots.inicializar(zonas)
 Clues.inicializar(zonas, function(jogador: Player, pistaId: string)
     Inventory.adicionarPista(jogador, pistaId)
 end)
+Janitor.inicializar(zonas)
 
 local zonaInicial = zonas[1]
 assert(zonaInicial ~= nil, "A primeira zona do labirinto precisa existir")
