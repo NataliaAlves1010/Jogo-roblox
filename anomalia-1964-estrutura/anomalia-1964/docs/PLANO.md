@@ -33,7 +33,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 - [ ] T20 `server/Interact.luau`: base com ProximityPrompt (valida distância no servidor)
 - [ ] T21 `Obstacles/LockedDoor.luau` + chaves por cor
 - [ ] T22 `Obstacles/Lever.luau`: alavanca abre portão em outro ponto do mapa
-- [ ] T23 `Obstacles/FallingFloor.luau`: piso temporário que cai e volta
+- [x] T23 `Obstacles/FallingFloor.luau`: piso temporário que cai e volta
 - [ ] T24 `Obstacles/LightBeam.luau`: feixe de luz/câmera com ritmo; atravessar só no intervalo
 - [ ] T25 `Obstacles/Vent.luau`: duto de atalho (agachado, mais lento, guarda não segue)
 - [ ] T26 `server/ObstaclePlacer.luau`: distribui obstáculos por zona, garantindo que o caminho até a chave continua possível (validar com BFS)
