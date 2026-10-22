@@ -13,6 +13,8 @@ local config = {
     Movement = {
         PlayerWalkSpeed = 16,
         GuardWalkSpeed = 14,
+        VentWalkSpeed = 8,
+        VentHipHeightReduction = 1,
     },
     GuardVision = {
         Range = 96,
