@@ -100,15 +100,7 @@ function Checkpoints.inicializar(zonas: { Zona }): ()
         return
     end
 
-    assert(#zonas > 0, "É necessário inicializar pelo menos um checkpoint")
-
-    for indice, zona in zonas do
-        local ponto = configurarZona(zona)
-        if indice == 1 then
-            pontoInicial = ponto
-        end
-    end
-
+    Checkpoints.reiniciar(zonas)
     inicializado = true
     Players.PlayerAdded:Connect(conectarJogador)
     Players.PlayerRemoving:Connect(function(jogador)
@@ -117,6 +109,19 @@ function Checkpoints.inicializar(zonas: { Zona }): ()
 
     for _, jogador in Players:GetPlayers() do
         conectarJogador(jogador)
+    end
+end
+
+function Checkpoints.reiniciar(zonas: { Zona }): ()
+    assert(#zonas > 0, "É necessário inicializar pelo menos um checkpoint")
+    table.clear(pontosPorJogador)
+    pontoInicial = nil
+
+    for indice, zona in zonas do
+        local ponto = configurarZona(zona)
+        if indice == 1 then
+            pontoInicial = ponto
+        end
     end
 end
 

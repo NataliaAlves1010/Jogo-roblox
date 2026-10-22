@@ -19,6 +19,7 @@ type Zona = Zones.Zona
 
 local Clues = {}
 local coletadasPorJogador: { [number]: { [string]: boolean } } = {}
+local inicializado = false
 
 local function encontrarZona(zonas: { Zona }, nome: string): Zona?
     for _, zona in zonas do
@@ -81,8 +82,9 @@ local function criarPista(zona: Zona, pista: Pista, aoColetar: (Player, string) 
     end)
 end
 
-function Clues.inicializar(zonas: { Zona }, aoColetar: (Player, string) -> ()): ()
+function Clues.reiniciar(zonas: { Zona }, aoColetar: (Player, string) -> ()): ()
     assert(#zonas == Config.Zones.Count, "O número de zonas não corresponde à configuração")
+    table.clear(coletadasPorJogador)
 
     local contagemPorZona: { [string]: number } = {}
     local ids: { [string]: boolean } = {}
@@ -101,10 +103,17 @@ function Clues.inicializar(zonas: { Zona }, aoColetar: (Player, string) -> ()): 
         local quantidade = contagemPorZona[zona.Nome] or 0
         assert(quantidade >= 2 and quantidade <= 3, `A zona {zona.Nome} precisa ter de 2 a 3 pistas`)
     end
+end
 
+function Clues.inicializar(zonas: { Zona }, aoColetar: (Player, string) -> ()): ()
+    if inicializado then
+        return
+    end
+    inicializado = true
     Players.PlayerRemoving:Connect(function(jogador: Player)
         coletadasPorJogador[jogador.UserId] = nil
     end)
+    Clues.reiniciar(zonas, aoColetar)
 end
 
 return Clues

@@ -46,7 +46,7 @@ local Vision = require(visionModule)
 local Chase = require(chaseModule)
 local StateMachine = require(stateMachineModule)
 
-local function montarMapa(): (Folder, { Zones.Zona })
+local function montarMapa(seed: number): (Folder, { Zones.Zona }, Model)
     local labirintoExistente = workspace:FindFirstChild("Labirinto")
     if labirintoExistente ~= nil then
         labirintoExistente:Destroy()
@@ -61,13 +61,12 @@ local function montarMapa(): (Folder, { Zones.Zona })
         spawnPadrao:Destroy()
     end
 
-    local grade = MazeGenerator.gerar(Config.Maze.Rows, Config.Maze.Columns, Config.Maze.Seed)
+    local grade = MazeGenerator.gerar(Config.Maze.Rows, Config.Maze.Columns, seed)
     local mapa = MazeBuilder.construir(grade, workspace)
     local zonas = Zones.criar(mapa, grade)
     local sala = GoalRoom.criar(mapa, grade)
-    Progress.inicializar(sala)
 
-    return mapa, zonas
+    return mapa, zonas, sala
 end
 
 local function obterJogadorVisivel(guarda: Model): Player?
@@ -225,18 +224,51 @@ local function afastarGuardaDoCheckpoint(guarda: Model, zona: Zones.Zona): ()
     end
 end
 
-Remotes.inicializar()
-Inventory.inicializar()
-local mapa, zonas = montarMapa()
-Checkpoints.inicializar(zonas)
-HideSpots.inicializar(zonas)
-Clues.inicializar(zonas, function(jogador: Player, pistaId: string)
+local function aoColetarPista(jogador: Player, pistaId: string): ()
     Inventory.adicionarPista(jogador, pistaId)
-end)
-Janitor.inicializar(zonas)
+end
 
-local zonaInicial = zonas[1]
-assert(zonaInicial ~= nil, "A primeira zona do labirinto precisa existir")
-local guarda = GuardSpawn.criar(zonaInicial)
-afastarGuardaDoCheckpoint(guarda, zonaInicial)
-iniciarControleDoGuarda(guarda, mapa)
+local function iniciarPartida(seed: number, primeiroInicio: boolean): ()
+    local mapa, zonas, sala = montarMapa(seed)
+    if primeiroInicio then
+        Inventory.inicializar()
+        Checkpoints.inicializar(zonas)
+        HideSpots.inicializar(zonas)
+        Clues.inicializar(zonas, aoColetarPista)
+        Janitor.inicializar(zonas)
+    else
+        Inventory.resetarTodos()
+        Checkpoints.reiniciar(zonas)
+        HideSpots.reiniciar(zonas)
+        Clues.reiniciar(zonas, aoColetarPista)
+        Janitor.reiniciar(zonas)
+    end
+    Progress.inicializar(sala)
+
+    local zonaInicial = zonas[1]
+    assert(zonaInicial ~= nil, "A primeira zona do labirinto precisa existir")
+    local guarda = GuardSpawn.criar(zonaInicial)
+    afastarGuardaDoCheckpoint(guarda, zonaInicial)
+    iniciarControleDoGuarda(guarda, mapa)
+
+    if not primeiroInicio then
+        for _, jogador in Players:GetPlayers() do
+            local checkpoint = Checkpoints.obter(jogador)
+            local personagem = jogador.Character
+            if checkpoint ~= nil and personagem ~= nil then
+                personagem:PivotTo(checkpoint)
+                jogador:SetAttribute("UltimoCheckpoint", zonaInicial.Nome)
+            end
+        end
+    end
+end
+
+local eventoReinicio = Instance.new("BindableEvent")
+eventoReinicio.Name = "ReinicioSolicitado"
+eventoReinicio.Parent = serverFolder
+eventoReinicio.Event:Connect(function(_jogador: Player, novaSeed: number)
+    iniciarPartida(novaSeed, false)
+end)
+
+Remotes.inicializar()
+iniciarPartida(Config.Maze.Seed, true)

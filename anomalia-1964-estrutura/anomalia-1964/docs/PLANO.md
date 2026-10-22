@@ -49,7 +49,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 
 ## Fase 5 — Fechamento
 - [x] T34 `server/Progress.luau`: porta da Sala 214 exige as chaves + mínimo de pistas
-- [ ] T35 Vitória/final (tela, tempo, reiniciar mapa com nova seed)
+- [x] T35 Vitória/final (tela, tempo, reiniciar mapa com nova seed)
 - [ ] T36 Iluminação, névoa, sons e música por zona
 - [ ] T37 Câmera/lanterna do jogador (opcional), sprint com estamina
 - [ ] T38 Playtest e balanceamento (Config.luau: tamanho, velocidades, tempos)

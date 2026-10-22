@@ -30,6 +30,9 @@ local config = {
         DialoguePanelWidth = 520,
         DialoguePanelHeight = 180,
         DialogueChoiceHeight = 32,
+        EndingPanelWidth = 420,
+        EndingPanelHeight = 220,
+        EndingButtonHeight = 40,
     },
     Timing = {
         GuardRepathInterval = 1,

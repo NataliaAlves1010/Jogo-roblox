@@ -95,6 +95,17 @@ function Inventory.obter(jogador: Player): Inventario
     return copiarInventario(criarEstado(jogador).Publico)
 end
 
+function Inventory.resetarTodos(): ()
+    for _, jogador in Players:GetPlayers() do
+        local estado = criarEstado(jogador)
+        table.clear(estado.Publico.Chaves)
+        table.clear(estado.Publico.Pistas)
+        table.clear(estado.Chaves)
+        table.clear(estado.Pistas)
+        publicar(jogador, estado)
+    end
+end
+
 function Inventory.adicionarChave(jogador: Player, id: string): boolean
     local estado = criarEstado(jogador)
     return adicionar(jogador, id, estado.Publico.Chaves, estado.Chaves)

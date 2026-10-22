@@ -147,6 +147,13 @@ function Janitor.conversar(jogador: Player, faxineira: Model): boolean
     return true
 end
 
+function Janitor.reiniciar(zonas: { Zona }): ()
+    assert(#zonas == Config.Zones.Count, "O número de zonas não corresponde à configuração")
+    for _, zona in zonas do
+        criarFaxineira(zona)
+    end
+end
+
 function Janitor.inicializar(zonas: { Zona }): ()
     if inicializado then
         return
@@ -158,9 +165,7 @@ function Janitor.inicializar(zonas: { Zona }): ()
     assert(remoto:IsA("RemoteEvent"), "DialogoAtualizado precisa ser um RemoteEvent")
     remotoDialogo = remoto
 
-    for _, zona in zonas do
-        criarFaxineira(zona)
-    end
+    Janitor.reiniciar(zonas)
     inicializado = true
 end
 

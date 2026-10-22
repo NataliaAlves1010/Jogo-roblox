@@ -218,11 +218,11 @@ local function conectarPrompts(esconderijo: Esconderijo): ()
     end)
 end
 
-function HideSpots.inicializar(zonas: { Zona }): ()
-    if inicializado then
-        return
-    end
+function HideSpots.reiniciar(zonas: { Zona }): ()
     assert(#zonas > 0, "É necessário fornecer ao menos uma zona para criar esconderijos")
+    for jogador in estadoPorJogador do
+        sair(jogador, false)
+    end
 
     for _, zona in zonas do
         local esconderijo = criarEsconderijo(zona)
@@ -230,7 +230,13 @@ function HideSpots.inicializar(zonas: { Zona }): ()
             conectarPrompts(esconderijo)
         end
     end
+end
 
+function HideSpots.inicializar(zonas: { Zona }): ()
+    if inicializado then
+        return
+    end
+    HideSpots.reiniciar(zonas)
     inicializado = true
     Players.PlayerRemoving:Connect(function(jogador)
         sair(jogador, false)
