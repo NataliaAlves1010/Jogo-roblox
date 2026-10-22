@@ -40,7 +40,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 
 ## Fase 4 — Pistas e Faxineira (dep.: T20)
 - [x] T27 `server/Clues.luau` + `shared/ClueData.luau`: 9 pistas espalhadas, 2–3 por zona
-- [ ] T28 `server/Inventory.luau`: chaves e pistas por jogador (servidor é a fonte da verdade)
+- [x] T28 `server/Inventory.luau`: chaves e pistas por jogador (servidor é a fonte da verdade)
 - [ ] T29 `client/InventoryUI.luau` + diário de pistas
 - [ ] T30 `shared/DialogueData.luau`: falas da faxineira (dica por zona, reação a pistas já achadas)
 - [ ] T31 `server/Janitor.luau`: NPC com prompt de conversa, uma por zona ou itinerante
