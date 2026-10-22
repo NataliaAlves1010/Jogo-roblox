@@ -38,7 +38,7 @@ anomalia-1964/
 Quando o prompt for `Leia AGENTS.md e docs/tarefas/Txx.md. Execute apenas a Txx.`, faça exatamente isto, na ordem:
 
 1. Rode `git status`. Se houver alterações não commitadas, pare e avise.
-2. Rode `git checkout main && git pull origin main`.
+2. Rode `git checkout master && git pull origin main`.
 3. Crie a branch da tarefa: `git checkout -b Txx-titulo-curto`.
 4. Leia `docs/tarefas/Txx.md` e confira em `docs/PLANO.md` que as tarefas das quais ela depende estão marcadas `[x]`. Se não estiverem, pare e avise.
 5. Crie ou edite SOMENTE os arquivos listados na ficha, seguindo as assinaturas de função indicadas.
