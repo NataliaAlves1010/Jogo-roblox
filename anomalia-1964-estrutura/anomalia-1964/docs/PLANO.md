@@ -51,7 +51,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 - [x] T34 `server/Progress.luau`: porta da Sala 214 exige as chaves + mínimo de pistas
 - [x] T35 Vitória/final (tela, tempo, reiniciar mapa com nova seed)
 - [x] T36 Iluminação, névoa, sons e música por zona
-- [ ] T37 Câmera/lanterna do jogador (opcional), sprint com estamina
+- [x] T37 Câmera/lanterna do jogador (opcional), sprint com estamina
 - [ ] T38 Playtest e balanceamento (Config.luau: tamanho, velocidades, tempos)
 - [ ] T39 Testes: BFS de solvabilidade, TestEZ/jest para MazeGrid e Inventory
 

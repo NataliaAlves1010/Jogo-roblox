@@ -8,6 +8,7 @@ export type NomeRemoto =
     | "DialogoAtualizado"
     | "SolicitarReinicio"
     | "VitoriaAtualizada"
+    | "SolicitarSprint"
 
 export type NomeZona = "Recepção" | "Arquivo" | "Subsolo" | "Gabinete"
 

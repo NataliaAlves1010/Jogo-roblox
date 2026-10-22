@@ -15,6 +15,7 @@ local NOMES_REMOTOS: { NomeRemoto } = {
     "DialogoAtualizado",
     "SolicitarReinicio",
     "VitoriaAtualizada",
+    "SolicitarSprint",
 }
 
 local REMOTOS_PERMITIDOS: { [string]: boolean } = {}

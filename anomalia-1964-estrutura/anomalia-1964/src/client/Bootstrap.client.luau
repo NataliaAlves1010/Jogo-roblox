@@ -5,9 +5,11 @@ local InventoryUI = require(script.Parent:WaitForChild("InventoryUI") :: ModuleS
 local DialogueUI = require(script.Parent:WaitForChild("DialogueUI") :: ModuleScript)
 local EndingUI = require(script.Parent:WaitForChild("EndingUI") :: ModuleScript)
 local ZoneAtmosphere = require(script.Parent:WaitForChild("ZoneAtmosphere") :: ModuleScript)
+local PlayerMovement = require(script.Parent:WaitForChild("PlayerMovement") :: ModuleScript)
 
 AlertHUD.inicializar()
 InventoryUI.inicializar()
 DialogueUI.inicializar()
 EndingUI.inicializar()
 ZoneAtmosphere.inicializar()
+PlayerMovement.inicializar()
