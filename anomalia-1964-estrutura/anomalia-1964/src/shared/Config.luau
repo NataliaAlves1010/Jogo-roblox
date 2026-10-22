@@ -25,6 +25,12 @@ local config = {
         LightBeamThickness = 0.5,
         LightBeamWidth = 1.5,
     },
+    UI = {
+        DialogueTypingDelay = 0.025,
+        DialoguePanelWidth = 520,
+        DialoguePanelHeight = 180,
+        DialogueChoiceHeight = 32,
+    },
     Timing = {
         GuardRepathInterval = 1,
         GuardSearchDuration = 8,
