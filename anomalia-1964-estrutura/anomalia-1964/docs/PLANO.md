@@ -7,7 +7,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 ## Fase 0 — Base
 - [ ] T01 AGENTS.md + docs/PLANO.md + docs/tarefas/ (modelo de ficha)
 - [ ] T02 `default.project.json` (Rojo), pastas `src/server`, `src/client`, `src/shared`
-- [ ] T03 stylua.toml, selene.toml, wally/aftman (se usar)
+- [x] T03 stylua.toml, selene.toml, wally/aftman (se usar)
 - [ ] T04 `shared/Config.luau` (tamanho da célula, velocidades, tempos, nº de zonas)
 - [ ] T05 `shared/Types.luau` e `shared/Remotes.luau` (RemoteEvents criados pelo servidor)
 
