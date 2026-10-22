@@ -15,7 +15,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 - [x] T06 `shared/MazeGrid.luau`: grade NxM, paredes por célula, seed fixa
 - [x] T07 `server/MazeGenerator.luau`: DFS/backtracker + loops extras (evita só-um-caminho)
 - [x] T08 `server/MazeBuilder.luau`: transforma a grade em Parts (piso, paredes, teto) numa Folder
-- [ ] T09 `server/Zones.luau`: divide em 4 zonas (Recepção, Arquivo, Subsolo, Gabinete) com cor/iluminação própria
+- [x] T09 `server/Zones.luau`: divide em 4 zonas (Recepção, Arquivo, Subsolo, Gabinete) com cor/iluminação própria
 - [ ] T10 `server/Checkpoints.luau`: 1 por zona; respawn do jogador
 - [ ] T11 `server/GoalRoom.luau`: Sala 214 no centro/fim, porta final marcada
 
