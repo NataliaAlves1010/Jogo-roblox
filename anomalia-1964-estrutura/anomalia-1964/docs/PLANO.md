@@ -27,7 +27,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 - [x] T16 `Guard/Chase.luau`: perseguição contínua, recalcula caminho, velocidade um pouco abaixo da do jogador
 - [x] T17 `server/Capture.luau`: capturado = volta ao checkpoint + guarda reinicia patrulha (sem game over duro)
 - [x] T18 `server/HideSpots.luau`: armários/caixas; esconder quebra a visão e baixa o alerta
-- [ ] T19 `client/AlertHUD.luau`: barra de alerta do guarda (calmo/suspeito/perseguição)
+- [x] T19 `client/AlertHUD.luau`: barra de alerta do guarda (calmo/suspeito/perseguição)
 
 ## Fase 3 — Obstáculos (dep.: T08, T05)
 - [ ] T20 `server/Interact.luau`: base com ProximityPrompt (valida distância no servidor)
