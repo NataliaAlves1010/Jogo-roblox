@@ -12,15 +12,15 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 - [x] T05 `shared/Types.luau` e `shared/Remotes.luau` (RemoteEvents criados pelo servidor)
 
 ## Fase 1 — Labirinto (dep.: F0)
-- [ ] T06 `shared/MazeGrid.luau`: grade NxM, paredes por célula, seed fixa
-- [ ] T07 `server/MazeGenerator.luau`: DFS/backtracker + loops extras (evita só-um-caminho)
-- [ ] T08 `server/MazeBuilder.luau`: transforma a grade em Parts (piso, paredes, teto) numa Folder
-- [ ] T09 `server/Zones.luau`: divide em 4 zonas (Recepção, Arquivo, Subsolo, Gabinete) com cor/iluminação própria
-- [ ] T10 `server/Checkpoints.luau`: 1 por zona; respawn do jogador
-- [ ] T11 `server/GoalRoom.luau`: Sala 214 no centro/fim, porta final marcada
+- [x] T06 `shared/MazeGrid.luau`: grade NxM, paredes por célula, seed fixa
+- [x] T07 `server/MazeGenerator.luau`: DFS/backtracker + loops extras (evita só-um-caminho)
+- [x] T08 `server/MazeBuilder.luau`: transforma a grade em Parts (piso, paredes, teto) numa Folder
+- [x] T09 `server/Zones.luau`: divide em 4 zonas (Recepção, Arquivo, Subsolo, Gabinete) com cor/iluminação própria
+- [x] T10 `server/Checkpoints.luau`: 1 por zona; respawn do jogador
+- [x] T11 `server/GoalRoom.luau`: Sala 214 no centro/fim, porta final marcada
 
 ## Fase 2 — Guarda (dep.: T08)
-- [ ] T12 `server/Guard/Spawn.luau`: NPC guarda (Humanoid) na zona 1
+- [x] T12 `server/Guard/Spawn.luau`: NPC guarda (Humanoid) na zona 1
 - [ ] T13 `Guard/Patrol.luau`: waypoints nos cruzamentos, PathfindingService
 - [ ] T14 `Guard/Vision.luau`: cone de visão + raycast (parede bloqueia)
 - [ ] T15 `Guard/StateMachine.luau`: Patrulha → Suspeito → Perseguição → Busca (vai ao último ponto visto)
