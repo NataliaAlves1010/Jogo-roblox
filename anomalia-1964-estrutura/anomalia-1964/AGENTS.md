@@ -38,8 +38,8 @@ Quando o prompt for `Leia AGENTS.md e docs/tarefas/Txx.md. Execute apenas a Txx.
 3. Crie a branch da tarefa: `git checkout -b Txx-titulo-curto`.
 4. Leia `docs/tarefas/Txx.md` e confira em `docs/PLANO.md` que as tarefas das quais ela depende estão marcadas `[x]`. Se não estiverem, pare e avise.
 5. Crie ou edite SOMENTE os arquivos listados na ficha, seguindo as assinaturas de função indicadas.
-6. Rode `stylua src/` e corrija a formatação.
-7. Rode `selene src/` e corrija todos os avisos e erros.
+6. Rode `& "$env:USERPROFILE\.rokit\tool-storage\johnnymorganz\stylua\2.6.0\stylua.exe" src/` e corrija a formatação.
+7. Rode `& "$env:USERPROFILE\.rokit\tool-storage\kampfkarren\selene\0.32.0\selene.exe" src/` e corrija todos os avisos e erros.
 8. Se a ficha tiver critério de teste, rode-o. Se o teste falhar, corrija e repita os passos 6 a 8.
 9. Marque `[x]` na linha da tarefa em `docs/PLANO.md`.
 10. Faça o commit: `git add -A && git commit -m "Txx: título da tarefa"`.
