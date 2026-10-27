@@ -56,7 +56,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 - [ ] T39 Testes: BFS de solvabilidade, TestEZ/jest para MazeGrid e Inventory
 
 ## Fase 6 — Interface de Entrada e Navegação
-- [ ] T40 `client/CoverUI.luau` + `assets/ui/capa.png`: Tela de capa/menu inicial (fundo da capa, botões Jogar, Continuar, Galeria e Opções; Continuar mantém na tela sem ação; Jogar faz fade out e inicia o spawn do jogador)
+- [x] T40 `client/CoverUI.luau` + `assets/ui/capa.png`: Tela de capa/menu inicial (fundo da capa, botões Jogar, Continuar, Galeria e Opções; Continuar mantém na tela sem ação; Jogar faz fade out e inicia o spawn do jogador)
 - [ ] T41 `client/MapUI.luau` + `shared/Config.luau`: Tela cheia de mapa do Ministério acionada por tecla M ou botão na tela, renderizando a grade 31x31 das 4 zonas com a posição em tempo real do jogador
 
 ## Fase 7 — Dinâmica de Pistas, Perseguição Agressiva e Cartas Históricas
