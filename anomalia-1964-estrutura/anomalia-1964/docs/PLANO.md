@@ -1,6 +1,6 @@
 # Anomalia 1964 — PLANO (Roblox, Luau, Rojo)
 
-Conceito: escape em labirinto gigante (Ministério, Brasília, abril/1964). Chegar à Sala 214 reunindo pistas e chaves, com um guarda que persegue o jogador o tempo todo. A faxineira dá dicas por diálogo.
+Conceito: escape em labirinto gigante (Ministério, Brasília, abril/1964). Chegar à Sala 214 reunindo pistas e chaves, com um guarda que persegue o jogador. A faxineira dá dicas por diálogo. O jogador desbloqueia trechos de cartas históricas ao coletar pistas e compila a carta completa ao vencer na Sala 214.
 
 Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por código (Codex não edita .rbxl) · `--!strict` · `task.wait()`.
 
@@ -47,24 +47,29 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 - [x] T32 `client/DialogueUI.luau`: caixa de diálogo (nome, texto digitando, botões de escolha)
 - [x] T33 Faxineira entrega 1 chave/pista quando o jogador traz um item específico
 
-## Fase 5 — Fechamento
+## Fase 5 — Fechamento Básico
 - [x] T34 `server/Progress.luau`: porta da Sala 214 exige as chaves + mínimo de pistas
 - [x] T35 Vitória/final (tela, tempo, reiniciar mapa com nova seed)
 - [x] T36 Iluminação, névoa, sons e música por zona
 - [x] T37 Câmera/lanterna do jogador (opcional), sprint com estamina
-- [ ] T38 Playtest e balanceamento (Config.luau: tamanho, velocidades, tempos)
+- [ ] T38 Playtest e balanceamento inicial (Config.luau: tamanho, velocidades, tempos)
 - [ ] T39 Testes: BFS de solvabilidade, TestEZ/jest para MazeGrid e Inventory
 
-Paralelizáveis (arquivos distintos): T22+T23, T24+T25, T30+T32. Fases 0→1→2 em ordem.
+## Fase 6 — Interface de Entrada e Navegação
+- [ ] T40 `client/CoverUI.luau` + `assets/ui/capa.png`: Tela de capa/menu inicial (fundo da capa, botões Jogar, Continuar, Galeria e Opções; Continuar mantém na tela sem ação; Jogar faz fade out e inicia o spawn do jogador)
+- [ ] T41 `client/MapUI.luau` + `shared/Config.luau`: Tela cheia de mapa do Ministério acionada por tecla M ou botão na tela, renderizando a grade 31x31 das 4 zonas com a posição em tempo real do jogador
 
-## Aproveitável do zip (Godot)
-| Do zip | Uso no Roblox |
-|---|---|
-| Lore: Sala 214, Brasília, abril/1964, arquivo, zeladora, guarda | Texto, nomes e `DialogueData` |
-| `Suit.fbx` (Quaternius) | Importar como malha/rig do guarda ou faxineira; as animações do FBX não migram sozinhas, recrie Idle/Walk no Animation Editor |
-| Paleta de `level_environment.gd` (parede, piso, madeira, papel) | Cores do `MazeBuilder` e iluminação da zona 1 |
-| Layout corredor + sala de arquivo, estantes | Modelo de cenário da zona "Arquivo" |
-| `guard_patrol.gd` (ciclo de waypoints) | Só a ideia; T13 usa Pathfinding |
-| `controle_vigia.gd` (WASD, câmera) | Descartar, o Roblox já tem controle e câmera |
+## Fase 7 — Dinâmica de Pistas, Perseguição Agressiva e Cartas Históricas
+Conceito: cada pista coletada desaparece localmente para o jogador, emite alerta de ruído ao guarda e exibe um trecho da carta histórica. O guarda fica mais agressivo a cada pista achada. Na Sala 214, a carta completa com todos os trechos reunidos é revelada ao jogador.
+- [ ] T42 Ligar cartas e trechos às pistas: `letterId` e `trecho` em `shared/ClueData.luau` e `shared/LetterData.luau`
+- [ ] T43 `shared/Remotes.luau` + `shared/Types.luau`: remotes para ocultação de pistas no cliente, alerta acústico do guarda e envio de trechos
+- [ ] T44 `server/Clues.luau` + `client/CluesClient.luau`: pista desaparece localmente para quem coletou e emite ruído na célula da pista
+- [ ] T45 `server/Guard/StateMachine.luau` + `Config.luau`: guarda investiga ruído da pista imediatamente (`Suspeito`) e ganha velocidade e percepção progressivas por pista coletada
+- [ ] T46 `client/ClueToastUI.luau`: notificação rápida exibindo o trecho da carta recém-descoberta (sem travar controles do jogador)
+- [ ] T47 `client/InventoryUI.luau`: aba Cartas no Diário com os trechos parciais reunidos em ordem cronológica (n/9)
+- [ ] T48 `server/HelpRequest.luau`: validação e compilação da carta histórica completa para a Sala 214
+- [ ] T49 `client/HelpRequestUI.luau`: tela de leitura da carta final completa com os fatos históricos comprovados e tela de vitória
+- [ ] T50 `docs/CARTAS.md`: revisão pedagógica e fontes primárias históricas (tarefa humana)
+- [ ] T51 Testes integrados: `tests/letters.spec.luau` e validação do fluxo completo no Studio
 
-Código GDScript não é convertido; só ideias, textos e o FBX.
+Paralelizáveis: T40+T41, T46+T47. Execução recomendada na ordem sequencial da Fase 6 e Fase 7.
