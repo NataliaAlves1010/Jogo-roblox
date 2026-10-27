@@ -16,6 +16,10 @@ local NOMES_REMOTOS: { NomeRemoto } = {
     "SolicitarReinicio",
     "VitoriaAtualizada",
     "SolicitarSprint",
+    -- Dinâmica de pistas, ruído e cartas (T43)
+    "PistaColetadaCliente",
+    "RuidoEmitido",
+    "TrechoRecebido",
 }
 
 local REMOTOS_PERMITIDOS: { [string]: boolean } = {}
@@ -53,7 +57,7 @@ function Remotes.inicializar(): Folder
         end
     end
 
-    return pasta
+    return pasta :: Folder
 end
 
 function Remotes.obter(nome: string): RemoteEvent
