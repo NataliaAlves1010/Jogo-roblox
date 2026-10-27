@@ -21,11 +21,18 @@ local function criarBotao(nome: string, texto: string, corFundo: Color3, corText
     botao.BackgroundColor3 = corFundo
     botao.TextColor3 = corTexto
     botao.Font = Enum.Font.RobotoMono
-    botao.TextSize = 18
+    botao.TextScaled = true
     botao.BorderSizePixel = 2
     botao.BorderColor3 = COR_ESCURO
     botao.AutoButtonColor = true
     botao.LayoutOrder = ordem
+
+    local padding = Instance.new("UIPadding")
+    padding.PaddingTop = UDim.new(0.2, 0)
+    padding.PaddingBottom = UDim.new(0.2, 0)
+    padding.PaddingLeft = UDim.new(0.08, 0)
+    padding.PaddingRight = UDim.new(0.08, 0)
+    padding.Parent = botao
 
     local uicorner = Instance.new("UICorner")
     uicorner.CornerRadius = UDim.new(0, 0)
@@ -105,15 +112,7 @@ function CoverUI.montar(aoJogar: () -> ()): ScreenGui
     painelPrincipal.BorderSizePixel = 0
     painelPrincipal.Parent = gui
 
-    local imagemCapa = Instance.new("ImageLabel")
-    imagemCapa.Name = "ImagemCapa"
-    imagemCapa.Size = UDim2.fromScale(1, 1)
-    imagemCapa.Position = UDim2.fromScale(0, 0)
-    imagemCapa.BackgroundTransparency = 1
-    imagemCapa.ScaleType = Enum.ScaleType.Crop
-    imagemCapa.Image = ASSET_CAPA
-    imagemCapa.Parent = painelPrincipal
-
+    -- Container proporcional casado diretamente com as dimensões da arte original (1024x572)
     local containerArte = Instance.new("Frame")
     containerArte.Name = "ContainerArte"
     containerArte.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -129,11 +128,21 @@ function CoverUI.montar(aoJogar: () -> ()): ScreenGui
     aspectConstraint.DominantAxis = Enum.DominantAxis.Width
     aspectConstraint.Parent = containerArte
 
-    -- Container dos 4 botões posicionado exatamente onde ficavam na arte antiga
+    -- Imagem mapeada no mesmo container 1:1 dos botões
+    local imagemCapa = Instance.new("ImageLabel")
+    imagemCapa.Name = "ImagemCapa"
+    imagemCapa.Size = UDim2.fromScale(1, 1)
+    imagemCapa.Position = UDim2.fromScale(0, 0)
+    imagemCapa.BackgroundTransparency = 1
+    imagemCapa.ScaleType = Enum.ScaleType.Stretch
+    imagemCapa.Image = ASSET_CAPA
+    imagemCapa.Parent = containerArte
+
+    -- Posição idêntica à da foto de referência: X = 0.0752, Y = 0.7972, W = 0.4658, H = 0.0629
     local containerBotoes = Instance.new("Frame")
     containerBotoes.Name = "Botoes"
-    containerBotoes.Position = UDim2.fromScale(0.075, 0.795)
-    containerBotoes.Size = UDim2.fromScale(0.47, 0.075)
+    containerBotoes.Position = UDim2.fromScale(0.0752, 0.7972)
+    containerBotoes.Size = UDim2.fromScale(0.4658, 0.0629)
     containerBotoes.BackgroundTransparency = 1
     containerBotoes.Parent = containerArte
 
@@ -162,7 +171,7 @@ function CoverUI.montar(aoJogar: () -> ()): ScreenGui
     end)
 
     botaoContinuar.MouseButton1Click:Connect(function()
-        -- Não executa ação; mantém na capa conforme regra
+        -- Não executa ação; mantém na capa
     end)
 
     botaoGaleria.MouseButton1Click:Connect(function()
