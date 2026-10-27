@@ -61,7 +61,7 @@ Regras: uma tarefa por vez · servidor valida tudo · labirinto gerado por códi
 
 ## Fase 7 — Dinâmica de Pistas, Perseguição Agressiva e Cartas Históricas
 Conceito: cada pista coletada desaparece localmente para o jogador, emite alerta de ruído ao guarda e exibe um trecho da carta histórica. O guarda fica mais agressivo a cada pista achada. Na Sala 214, a carta completa com todos os trechos reunidos é revelada ao jogador.
-- [ ] T42 Ligar cartas e trechos às pistas: `letterId` e `trecho` em `shared/ClueData.luau` e `shared/LetterData.luau`
+- [x] T42 Ligar cartas e trechos às pistas: `letterId` e `trecho` em `shared/ClueData.luau` e `shared/LetterData.luau`
 - [ ] T43 `shared/Remotes.luau` + `shared/Types.luau`: remotes para ocultação de pistas no cliente, alerta acústico do guarda e envio de trechos
 - [ ] T44 `server/Clues.luau` + `client/CluesClient.luau`: pista desaparece localmente para quem coletou e emite ruído na célula da pista
 - [ ] T45 `server/Guard/StateMachine.luau` + `Config.luau`: guarda investiga ruído da pista imediatamente (`Suspeito`) e ganha velocidade e percepção progressivas por pista coletada
