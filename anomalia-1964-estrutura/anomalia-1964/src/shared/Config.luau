@@ -44,6 +44,18 @@ local config = {
         EndingPanelHeight = 220,
         EndingButtonHeight = 40,
     },
+    Map = {
+        ToggleKey = Enum.KeyCode.M,
+        ZoneColors = {
+            Recepcao = Color3.fromRGB(206, 190, 150),
+            Arquivo = Color3.fromRGB(170, 194, 205),
+            Subsolo = Color3.fromRGB(139, 156, 142),
+            Gabinete = Color3.fromRGB(188, 151, 142),
+            GoalRoom = Color3.fromRGB(255, 215, 0),
+        },
+        WallColor = Color3.fromRGB(30, 26, 22),
+        PlayerPinColor = Color3.fromRGB(220, 45, 50),
+    },
     Timing = {
         GuardRepathInterval = 1,
         GuardSearchDuration = 8,
