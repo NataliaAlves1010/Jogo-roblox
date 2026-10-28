@@ -119,6 +119,7 @@ local config = {
         LegendHeight = 380,
         MarkerSize = 12,
         MarkerTextSize = 8,
+        LayoutReadyTimeout = 10,
         ZoneColors = {
             Recepcao = Color3.fromRGB(206, 190, 150),
             Arquivo = Color3.fromRGB(170, 194, 205),
@@ -127,6 +128,7 @@ local config = {
             GoalRoom = Color3.fromRGB(255, 215, 0),
         },
         WallColor = Color3.fromRGB(30, 26, 22),
+        WallThicknessPixels = 3,
         PlayerPinColor = Color3.fromRGB(220, 45, 50),
         Markers = {
             Clue = { Color = Color3.fromRGB(245, 199, 70), Symbol = "P" },
