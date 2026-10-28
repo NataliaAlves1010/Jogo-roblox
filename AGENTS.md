@@ -45,20 +45,24 @@ Se `selene.toml` ou `default.project.json` ainda não existirem (antes da T03 e 
 Quando o prompt for `Leia AGENTS.md e docs/tarefas/Txx.md. Execute apenas a Txx.`, faça exatamente isto, na ordem:
 
 1. Rode `git status`. Se houver alterações não commitadas, pare e avise.
-2. Rode `git checkout master && git pull origin master`.
-3. Crie a branch da tarefa: `git checkout -b Txx-titulo-curto`.
+2. Rode `git checkout developer && git pull origin developer`.
+3. Crie a branch da tarefa a partir de `developer`: `git checkout -b Txx-titulo-curto`.
 4. Leia `docs/tarefas/Txx.md` e confira em `docs/PLANO.md` que as tarefas das quais ela depende estão marcadas `[x]`. Se não estiverem, pare e avise.
 5. Crie ou edite SOMENTE os arquivos listados na ficha, seguindo as assinaturas de função indicadas.
 6. Rode o StyLua (comando da seção Ferramentas) e corrija a formatação.
 7. Rode o Selene (comando da seção Ferramentas) e corrija todos os avisos e erros.
 8. Se a ficha tiver critério de teste, rode-o. Se o teste falhar, corrija e repita os passos 6 a 8.
 9. Marque `[x]` na linha da tarefa em `docs/PLANO.md`.
-10. Faça o commit: `git add -A && git commit -m "Txx: título da tarefa"`.
-11. Envie a branch: `git push -u origin Txx-titulo-curto`.
-12. Responda com um resumo curto: arquivos criados ou alterados, como testar no Studio e qualquer dúvida ou limitação.
+10. Faça o commit na branch da tarefa: `git add -A && git commit -m "Txx: título da tarefa"`.
+11. Envie a branch da tarefa: `git push -u origin Txx-titulo-curto`.
+12. Integre a tarefa concluída em `developer`: `git checkout developer && git pull origin developer && git merge --no-ff Txx-titulo-curto`.
+13. Envie `developer`: `git push origin developer`.
+14. Responda com um resumo curto: arquivos criados ou alterados, branch integrada, como testar no Studio e qualquer dúvida ou limitação.
 
 ## O que NÃO fazer
-- Não faça merge na `master`. Quem revisa e faz o merge é o dono do projeto.
+- Não faça merge de código na `master`. Integre tarefas concluídas somente em `developer` para revisão acumulada.
+- A pessoa dona do projeto revisará `developer` quando todas as tarefas desejadas estiverem prontas e fará o merge de `developer` em `master`.
+- Exceção para planejamento: fichas `docs/tarefas/Txx.md` solicitadas devem ser publicadas diretamente na `master`, sem levar código ou outros commits da `developer`.
 - Não comece a próxima tarefa por conta própria.
 - Não refatore código de tarefas anteriores. Se achar um problema nele, descreva no resumo final.
 - Não instale dependências novas sem estar na ficha.
@@ -70,6 +74,6 @@ Quando o prompt for `Leia AGENTS.md e docs/tarefas/Txx.md. Execute apenas a Txx.
 - Conflito de arquivos: não resolva sozinho, avise.
 
 ## Revisão (feita pelo dono do projeto)
-1. `git fetch && git diff master..Txx-titulo-curto`
+1. `git fetch && git diff master..developer`
 2. Testar no Studio com o Rojo conectado (`rojo serve`).
-3. Se estiver bom, merge na `master` e próxima tarefa. Se não, pedir ajuste na mesma sessão do Codex.
+3. Depois da revisão completa, a pessoa dona do projeto decide quando integrar `developer` em `master`.
