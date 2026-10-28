@@ -2,8 +2,8 @@
 
 local config = {
     Maze = {
-        Rows = 31,
-        Columns = 31,
+        Rows = 24,
+        Columns = 24,
         Seed = 1964,
         CellSize = 24,
         WallHeight = 18,
@@ -22,19 +22,28 @@ local config = {
         FlashlightRange = 32,
         FlashlightAngle = 72,
         FlashlightBrightness = 2,
-        GuardWalkSpeed = 14,
+        GuardWalkSpeed = 15.2,
         VentWalkSpeed = 8,
         VentHipHeightReduction = 1,
     },
     GuardVision = {
-        Range = 96,
-        FieldOfViewDegrees = 90,
+        Range = 116,
+        FieldOfViewDegrees = 110,
+    },
+    GuardAnimations = {
+        IdleAnimationId = "rbxassetid://507766666",
+        WalkAnimationId = "rbxassetid://507777826",
+        RunAnimationId = "rbxassetid://507767714",
+        FadeDuration = 0.18,
+    },
+    GuardChase = {
+        WaypointChangeThreshold = 2,
     },
     GuardAggression = {
         MaximumClues = 9,
-        WalkSpeedPerClue = 0.2,
-        MaximumWalkSpeed = 15.8,
-        VisionRangePerClue = 6,
+        WalkSpeedPerClue = 0.08,
+        MaximumWalkSpeed = 15.9,
+        VisionRangePerClue = 8,
     },
     Obstacles = {
         LightBeamHeight = 8,
@@ -140,13 +149,21 @@ local config = {
         },
     },
     Timing = {
-        GuardRepathInterval = 1,
-        GuardSearchDuration = 8,
-        CaptureRespawnDelay = 2,
+        GuardRepathInterval = 0.25,
+        GuardSearchDuration = 14,
+        PrisonDuration = 10,
         FallingFloorDelay = 0.35,
         FallingFloorDuration = 4,
         LightBeamActiveDuration = 3,
         LightBeamSafeDuration = 2,
+    },
+    Prison = {
+        CellWidth = 14,
+        CellDepth = 14,
+        WallHeight = 12,
+        WallThickness = 0.7,
+        DistanceFromMaze = 24,
+        BarCount = 8,
     },
     Zones = {
         Count = 4,
