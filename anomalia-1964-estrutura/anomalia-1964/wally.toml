@@ -1,0 +1,8 @@
+[package]
+name = "anomalia1964/jogo-roblox"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dev-dependencies]
+TestEZ = "roblox/testez@0.4.1"

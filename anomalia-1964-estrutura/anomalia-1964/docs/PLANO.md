@@ -70,6 +70,6 @@ Conceito: cada pista coletada desaparece localmente para o jogador, emite alerta
 - [x] T48 `server/HelpRequest.luau`: validação e compilação da carta histórica completa para a Sala 214
 - [x] T49 `client/HelpRequestUI.luau`: tela de leitura da carta final completa com os fatos históricos comprovados e tela de vitória
 - [ ] T50 `docs/CARTAS.md`: revisão pedagógica e fontes primárias históricas (tarefa humana)
-- [ ] T51 Testes integrados: `tests/letters.spec.luau` e validação do fluxo completo no Studio
+- [x] T51 Testes integrados: `tests/letters.spec.luau` e validação do fluxo completo no Studio
 
 Paralelizáveis: T40+T41, T46+T47. Execução recomendada na ordem sequencial da Fase 6 e Fase 7.
