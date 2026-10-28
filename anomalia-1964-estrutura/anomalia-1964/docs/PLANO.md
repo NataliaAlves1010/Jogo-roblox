@@ -76,3 +76,4 @@ Paralelizáveis: T40+T41, T46+T47. Execução recomendada na ordem sequencial da
 
 ## Fase 8 — Navegação detalhada
 - [x] T52 `client/MapUI.luau` + marcadores do servidor: exibir pistas, obstáculos, checkpoints, esconderijos, faxineiras e Sala 214 na tela do mapa, com legenda e ocultação local das pistas coletadas.
+- [x] T53 `server/Main.server.luau` + `client/Bootstrap.client.luau` + `client/MapUI.luau` + `shared/Config.luau`: recuperar e detalhar as paredes internas e externas sem esconder passagens do labirinto.

@@ -301,6 +301,17 @@ local function criarItemLegenda(parent: Instance, texto: string, cor: Color3, or
     label.Parent = item
 end
 
+local function criarLinhaParede(parent: Instance, nome: string, tamanho: UDim2, posicao: UDim2): ()
+    local parede = Instance.new("Frame")
+    parede.Name = nome
+    parede.Size = tamanho
+    parede.Position = posicao
+    parede.BackgroundColor3 = Config.Map.WallColor
+    parede.BorderSizePixel = 0
+    parede.ZIndex = 2
+    parede.Parent = parent
+end
+
 function MapUI.inicializar(grade: Grade): ()
     if guiAtual ~= nil then
         return
@@ -487,27 +498,41 @@ function MapUI.inicializar(grade: Grade): ()
             celulaFrame.BorderSizePixel = 0
             celulaFrame.Parent = areaGrade
 
-            -- Paredes representadas como linhas finas escuras
+            -- Paredes internas desenhadas uma vez; leste e sul fecham o contorno externo.
             if MazeGrid.temParede(grade, linha, coluna, "Norte") then
-                local bordaNorte = Instance.new("Frame")
-                bordaNorte.Name = "W_Norte"
-                bordaNorte.Size = UDim2.new(1, 0, 0, 1)
-                bordaNorte.Position = UDim2.fromScale(0, 0)
-                bordaNorte.BackgroundColor3 = Config.Map.WallColor
-                bordaNorte.BorderSizePixel = 0
-                bordaNorte.ZIndex = 2
-                bordaNorte.Parent = celulaFrame
+                criarLinhaParede(
+                    celulaFrame,
+                    "W_Norte",
+                    UDim2.new(1, 0, 0, Config.Map.WallThicknessPixels),
+                    UDim2.fromScale(0, 0)
+                )
             end
 
             if MazeGrid.temParede(grade, linha, coluna, "Oeste") then
-                local bordaOeste = Instance.new("Frame")
-                bordaOeste.Name = "W_Oeste"
-                bordaOeste.Size = UDim2.new(0, 1, 1, 0)
-                bordaOeste.Position = UDim2.fromScale(0, 0)
-                bordaOeste.BackgroundColor3 = Config.Map.WallColor
-                bordaOeste.BorderSizePixel = 0
-                bordaOeste.ZIndex = 2
-                bordaOeste.Parent = celulaFrame
+                criarLinhaParede(
+                    celulaFrame,
+                    "W_Oeste",
+                    UDim2.new(0, Config.Map.WallThicknessPixels, 1, 0),
+                    UDim2.fromScale(0, 0)
+                )
+            end
+
+            if coluna == grade.Colunas and MazeGrid.temParede(grade, linha, coluna, "Leste") then
+                criarLinhaParede(
+                    celulaFrame,
+                    "W_Leste",
+                    UDim2.new(0, Config.Map.WallThicknessPixels, 1, 0),
+                    UDim2.new(1, -Config.Map.WallThicknessPixels, 0, 0)
+                )
+            end
+
+            if linha == grade.Linhas and MazeGrid.temParede(grade, linha, coluna, "Sul") then
+                criarLinhaParede(
+                    celulaFrame,
+                    "W_Sul",
+                    UDim2.new(1, 0, 0, Config.Map.WallThicknessPixels),
+                    UDim2.new(0, 0, 1, -Config.Map.WallThicknessPixels)
+                )
             end
         end
     end

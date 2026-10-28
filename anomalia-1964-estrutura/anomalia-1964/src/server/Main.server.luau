@@ -265,6 +265,15 @@ local function iniciarPartida(seed: number, primeiroInicio: boolean): ()
             end
         end
     end
+
+    local quantidadeParedes = 0
+    for _, objeto in mapa:GetDescendants() do
+        if string.sub(objeto.Name, 1, 6) == "Parede" then
+            quantidadeParedes += 1
+        end
+    end
+    mapa:SetAttribute("QuantidadeParedes", quantidadeParedes)
+    mapa:SetAttribute("MapaPronto", true)
 end
 
 local eventoReinicio = Instance.new("BindableEvent")

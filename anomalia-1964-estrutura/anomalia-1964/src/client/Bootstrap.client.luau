@@ -52,14 +52,57 @@ local function obterGradeDoMundo(): MazeGrid.Grade
     local grade = MazeGrid.criar(Config.Maze.Rows, Config.Maze.Columns, Config.Maze.Seed)
     local labirinto = workspace:WaitForChild("Labirinto", 10)
     if labirinto ~= nil then
-        for linha = 1, Config.Maze.Rows do
-            for coluna = 1, Config.Maze.Columns do
-                local sufixo = string.format("_%d_%d", linha, coluna)
-                grade.Celulas[linha][coluna].Norte = labirinto:FindFirstChild("ParedeNorte" .. sufixo) ~= nil
-                grade.Celulas[linha][coluna].Leste = labirinto:FindFirstChild("ParedeLeste" .. sufixo) ~= nil
-                grade.Celulas[linha][coluna].Sul = labirinto:FindFirstChild("ParedeSul" .. sufixo) ~= nil
-                grade.Celulas[linha][coluna].Oeste = labirinto:FindFirstChild("ParedeOeste" .. sufixo) ~= nil
+        local prazo = os.clock() + Config.Map.LayoutReadyTimeout
+        while labirinto:GetAttribute("MapaPronto") ~= true and os.clock() < prazo do
+            task.wait()
+        end
+
+        if labirinto:GetAttribute("MapaPronto") == true then
+            local quantidadeEsperada = labirinto:GetAttribute("QuantidadeParedes")
+            while typeof(quantidadeEsperada) ~= "number" and os.clock() < prazo do
+                task.wait()
+                quantidadeEsperada = labirinto:GetAttribute("QuantidadeParedes")
             end
+
+            local quantidadeRecebida = 0
+            local conexaoParedes = labirinto.DescendantAdded:Connect(function(descendente: Instance)
+                if string.sub(descendente.Name, 1, 6) == "Parede" then
+                    quantidadeRecebida += 1
+                end
+            end)
+            for _, descendente in labirinto:GetDescendants() do
+                if string.sub(descendente.Name, 1, 6) == "Parede" then
+                    quantidadeRecebida += 1
+                end
+            end
+
+            while
+                typeof(quantidadeEsperada) == "number"
+                and quantidadeRecebida < quantidadeEsperada
+                and os.clock() < prazo
+            do
+                task.wait()
+            end
+            conexaoParedes:Disconnect()
+
+            if typeof(quantidadeEsperada) == "number" and quantidadeRecebida >= quantidadeEsperada then
+                for linha = 1, Config.Maze.Rows do
+                    for coluna = 1, Config.Maze.Columns do
+                        local sufixo = string.format("_%d_%d", linha, coluna)
+                        grade.Celulas[linha][coluna].Norte = labirinto:FindFirstChild("ParedeNorte" .. sufixo, true)
+                            ~= nil
+                        grade.Celulas[linha][coluna].Leste = labirinto:FindFirstChild("ParedeLeste" .. sufixo, true)
+                            ~= nil
+                        grade.Celulas[linha][coluna].Sul = labirinto:FindFirstChild("ParedeSul" .. sufixo, true) ~= nil
+                        grade.Celulas[linha][coluna].Oeste = labirinto:FindFirstChild("ParedeOeste" .. sufixo, true)
+                            ~= nil
+                    end
+                end
+            else
+                warn("As paredes do labirinto não replicaram a tempo para desenhar o mapa completo.")
+            end
+        else
+            warn("O labirinto não ficou pronto a tempo de desenhar as paredes do mapa.")
         end
     end
     return grade
