@@ -144,6 +144,7 @@ end
 
 function Vent.configurar(duto: Model): ()
     assert(dutos[duto] == nil, "O duto já está configurado")
+    duto:SetAttribute("TipoObstaculo", "Duto")
 
     local entrada = duto:FindFirstChild("Entrada", true)
     local saida = duto:FindFirstChild("Saida", true)

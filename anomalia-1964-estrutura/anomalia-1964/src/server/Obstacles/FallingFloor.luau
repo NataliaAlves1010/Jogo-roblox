@@ -66,6 +66,7 @@ end
 
 function FallingFloor.configurar(piso: BasePart): ()
     assert(estados[piso] == nil, "O piso já está configurado")
+    piso:SetAttribute("TipoObstaculo", "PisoInstavel")
 
     local estado: EstadoPiso = {
         CFrameOriginal = piso.CFrame,

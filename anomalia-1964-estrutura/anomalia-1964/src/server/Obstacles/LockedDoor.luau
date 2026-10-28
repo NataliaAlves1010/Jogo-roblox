@@ -34,6 +34,7 @@ end
 
 function LockedDoor.configurar(porta: BasePart, corChave: string, validarChave: (Player, string) -> boolean): ()
     assert(corChave ~= "", "A cor da chave não pode estar vazia")
+    porta:SetAttribute("TipoObstaculo", "PortaTrancada")
     porta:SetAttribute("CorChave", corChave)
     porta:SetAttribute("Aberta", false)
 

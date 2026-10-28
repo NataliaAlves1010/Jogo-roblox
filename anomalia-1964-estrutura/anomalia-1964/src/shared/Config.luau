@@ -115,6 +115,10 @@ local config = {
     },
     Map = {
         ToggleKey = Enum.KeyCode.M,
+        LegendWidth = 200,
+        LegendHeight = 380,
+        MarkerSize = 12,
+        MarkerTextSize = 8,
         ZoneColors = {
             Recepcao = Color3.fromRGB(206, 190, 150),
             Arquivo = Color3.fromRGB(170, 194, 205),
@@ -124,6 +128,14 @@ local config = {
         },
         WallColor = Color3.fromRGB(30, 26, 22),
         PlayerPinColor = Color3.fromRGB(220, 45, 50),
+        Markers = {
+            Clue = { Color = Color3.fromRGB(245, 199, 70), Symbol = "P" },
+            Obstacle = { Color = Color3.fromRGB(222, 117, 78), Symbol = "O" },
+            Checkpoint = { Color = Color3.fromRGB(87, 191, 138), Symbol = "C" },
+            HideSpot = { Color = Color3.fromRGB(123, 167, 222), Symbol = "E" },
+            Janitor = { Color = Color3.fromRGB(201, 147, 221), Symbol = "F" },
+            Goal = { Color = Color3.fromRGB(255, 215, 0), Symbol = "S" },
+        },
     },
     Timing = {
         GuardRepathInterval = 1,

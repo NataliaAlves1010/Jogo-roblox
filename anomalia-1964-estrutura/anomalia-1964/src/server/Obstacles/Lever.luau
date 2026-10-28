@@ -44,7 +44,9 @@ function Lever.configurar(alavanca: BasePart, portao: BasePart): ()
     assert(portoesPorAlavanca[alavanca] == nil, "A alavanca já está configurada")
 
     portoesPorAlavanca[alavanca] = portao
+    alavanca:SetAttribute("TipoObstaculo", "Alavanca")
     alavanca:SetAttribute("Ativada", false)
+    portao:SetAttribute("TipoObstaculo", "Portao")
     portao:SetAttribute("AbertoPelaAlavanca", false)
 
     local prompt = alavanca:FindFirstChildOfClass("ProximityPrompt")
