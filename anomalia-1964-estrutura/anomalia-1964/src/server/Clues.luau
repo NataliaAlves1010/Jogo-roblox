@@ -6,8 +6,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local sharedFolder = ReplicatedStorage:WaitForChild("Shared")
 local clueDataModule = sharedFolder:WaitForChild("ClueData") :: ModuleScript
 local configModule = sharedFolder:WaitForChild("Config") :: ModuleScript
+local remotesModule = sharedFolder:WaitForChild("Remotes") :: ModuleScript
 local ClueData = require(clueDataModule)
 local Config = require(configModule)
+local Remotes = require(remotesModule)
 
 local interactModule = script.Parent:WaitForChild("Interact") :: ModuleScript
 local zonesModule = script.Parent:WaitForChild("Zones") :: ModuleScript
@@ -78,8 +80,17 @@ local function criarPista(zona: Zona, pista: Pista, aoColetar: (Player, string) 
         end
 
         coletadas[pista.Id] = true
+        Remotes.obter("PistaColetadaCliente"):FireClient(jogador, pista.Id)
+        Clues.notificarRuido(pista.Celula, objeto.Position)
         aoColetar(jogador, pista.Id)
     end)
+end
+
+function Clues.notificarRuido(celula: Vector2, posicao: Vector3): ()
+    Remotes.obter("RuidoEmitido"):FireAllClients({
+        Celula = celula,
+        Posicao = posicao,
+    })
 end
 
 function Clues.reiniciar(zonas: { Zona }, aoColetar: (Player, string) -> ()): ()
