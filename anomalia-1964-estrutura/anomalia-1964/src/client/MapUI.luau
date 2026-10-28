@@ -8,18 +8,28 @@ local UserInputService = game:GetService("UserInputService")
 local sharedFolder = ReplicatedStorage:WaitForChild("Shared")
 local configModule = sharedFolder:WaitForChild("Config") :: ModuleScript
 local mazeGridModule = sharedFolder:WaitForChild("MazeGrid") :: ModuleScript
+local remotesModule = sharedFolder:WaitForChild("Remotes") :: ModuleScript
 
 local Config = require(configModule)
 local MazeGrid = require(mazeGridModule)
+local Remotes = require(remotesModule)
 
 type Grade = MazeGrid.Grade
+type TipoMarcador = "Pista" | "Obstaculo" | "Checkpoint" | "Esconderijo" | "Faxineira" | "SalaFinal"
+type DefinicaoMarcador = { Color: Color3, Symbol: string }
 
 local MapUI = {}
 local guiAtual: ScreenGui? = nil
 local painelMapa: Frame? = nil
 local pinoJogador: Frame? = nil
 local containerGrade: Frame? = nil
+local containerMarcadores: Frame? = nil
 local conexaoRender: RBXScriptConnection? = nil
+local conexaoDescendantAdded: RBXScriptConnection? = nil
+local conexaoDescendantRemoving: RBXScriptConnection? = nil
+local mapaObservado: Folder? = nil
+local marcadoresPorInstancia: { [Instance]: Frame } = {}
+local marcadoresPorPista: { [string]: Frame } = {}
 local gradeAtual: Grade? = nil
 local visivel = false
 
@@ -82,6 +92,161 @@ local function atualizarPosicaoJogador(): ()
     pinoJogador.Rotation = anguloGraus
 end
 
+local function obterPosicaoNoMapa(posicao: Vector3): UDim2?
+    if gradeAtual == nil then
+        return nil
+    end
+
+    local tamanhoCelula = Config.Maze.CellSize
+    local larguraTotal = gradeAtual.Colunas * tamanhoCelula
+    local profundidadeTotal = gradeAtual.Linhas * tamanhoCelula
+    local normX = math.clamp((posicao.X + larguraTotal / 2) / larguraTotal, 0, 1)
+    local normY = math.clamp((posicao.Z + profundidadeTotal / 2) / profundidadeTotal, 0, 1)
+    return UDim2.fromScale(normX, normY)
+end
+
+local function obterPosicaoInstancia(instancia: Instance): Vector3?
+    if instancia:IsA("BasePart") then
+        return instancia.Position
+    elseif instancia:IsA("Model") then
+        return instancia:GetPivot().Position
+    end
+    return nil
+end
+
+local function identificarMarcador(instancia: Instance): TipoMarcador?
+    if typeof(instancia:GetAttribute("PistaId")) == "string" then
+        return "Pista"
+    elseif instancia:GetAttribute("PontoCheckpoint") == true then
+        return "Checkpoint"
+    elseif typeof(instancia:GetAttribute("TipoEsconderijo")) == "string" then
+        return "Esconderijo"
+    elseif instancia:GetAttribute("SalaFinal") == true then
+        return "SalaFinal"
+    elseif string.match(instancia.Name, "^Faxineira_") ~= nil then
+        return "Faxineira"
+    elseif typeof(instancia:GetAttribute("TipoObstaculo")) == "string" then
+        return "Obstaculo"
+    end
+    return nil
+end
+
+local function obterDefinicaoMarcador(tipo: TipoMarcador): DefinicaoMarcador
+    local marcadores = Config.Map.Markers
+    if tipo == "Pista" then
+        return marcadores.Clue
+    elseif tipo == "Obstaculo" then
+        return marcadores.Obstacle
+    elseif tipo == "Checkpoint" then
+        return marcadores.Checkpoint
+    elseif tipo == "Esconderijo" then
+        return marcadores.HideSpot
+    elseif tipo == "Faxineira" then
+        return marcadores.Janitor
+    end
+    return marcadores.Goal
+end
+
+local function removerMarcador(instancia: Instance): ()
+    local marcador = marcadoresPorInstancia[instancia]
+    if marcador == nil then
+        return
+    end
+
+    marcadoresPorInstancia[instancia] = nil
+    local pistaId = instancia:GetAttribute("PistaId")
+    if typeof(pistaId) == "string" and marcadoresPorPista[pistaId] == marcador then
+        marcadoresPorPista[pistaId] = nil
+    end
+    marcador:Destroy()
+end
+
+local function registrarMarcador(instancia: Instance): ()
+    if containerMarcadores == nil or marcadoresPorInstancia[instancia] ~= nil then
+        return
+    end
+
+    local tipo = identificarMarcador(instancia)
+    local posicao = obterPosicaoInstancia(instancia)
+    local posicaoMapa = if posicao ~= nil then obterPosicaoNoMapa(posicao) else nil
+    if tipo == nil or posicaoMapa == nil then
+        return
+    end
+
+    local pistaId = instancia:GetAttribute("PistaId")
+    if typeof(pistaId) == "string" and marcadoresPorPista[pistaId] ~= nil then
+        return
+    end
+
+    local definicao = obterDefinicaoMarcador(tipo)
+    local marcador = Instance.new("TextLabel")
+    marcador.Name = `Marcador_{tipo}_{instancia.Name}`
+    marcador.AnchorPoint = Vector2.new(0.5, 0.5)
+    marcador.Position = posicaoMapa
+    marcador.Size = UDim2.fromOffset(Config.Map.MarkerSize, Config.Map.MarkerSize)
+    marcador.BackgroundColor3 = definicao.Color
+    marcador.BorderColor3 = Color3.fromRGB(30, 26, 22)
+    marcador.BorderSizePixel = 1
+    marcador.Font = Enum.Font.RobotoMono
+    marcador.Text = definicao.Symbol
+    marcador.TextColor3 = Color3.fromRGB(30, 26, 22)
+    marcador.TextSize = Config.Map.MarkerTextSize
+    marcador.ZIndex = 5
+    marcador.Parent = containerMarcadores
+
+    local canto = Instance.new("UICorner")
+    canto.CornerRadius = UDim.new(1, 0)
+    canto.Parent = marcador
+
+    marcadoresPorInstancia[instancia] = marcador
+    if typeof(pistaId) == "string" then
+        marcadoresPorPista[pistaId] = marcador
+    end
+end
+
+local function limparMarcadores(): ()
+    for instancia, marcador in marcadoresPorInstancia do
+        marcadoresPorInstancia[instancia] = nil
+        marcador:Destroy()
+    end
+    table.clear(marcadoresPorPista)
+end
+
+local function desconectarMapaObservado(): ()
+    if conexaoDescendantAdded ~= nil then
+        conexaoDescendantAdded:Disconnect()
+        conexaoDescendantAdded = nil
+    end
+    if conexaoDescendantRemoving ~= nil then
+        conexaoDescendantRemoving:Disconnect()
+        conexaoDescendantRemoving = nil
+    end
+    mapaObservado = nil
+    limparMarcadores()
+end
+
+local function observarMapa(instancia: Instance): ()
+    if not instancia:IsA("Folder") or instancia.Name ~= "Labirinto" or mapaObservado == instancia then
+        return
+    end
+
+    desconectarMapaObservado()
+    local mapa = instancia :: Folder
+    mapaObservado = mapa
+    for _, descendente in mapa:GetDescendants() do
+        registrarMarcador(descendente)
+    end
+    conexaoDescendantAdded = mapa.DescendantAdded:Connect(function(descendente: Instance)
+        task.defer(registrarMarcador, descendente)
+    end)
+    conexaoDescendantRemoving = mapa.DescendantRemoving:Connect(removerMarcador)
+    mapa.Destroying:Connect(function()
+        if mapaObservado == mapa then
+            desconectarMapaObservado()
+        end
+    end)
+end
+
 function MapUI.alternarVisibilidade(): ()
     visivel = not visivel
 
@@ -102,7 +267,7 @@ function MapUI.alternarVisibilidade(): ()
     end
 end
 
-local function criarItemLegenda(parent: Instance, texto: string, cor: Color3, ordem: number): ()
+local function criarItemLegenda(parent: Instance, texto: string, cor: Color3, ordem: number, simbolo: string?): ()
     local item = Instance.new("Frame")
     item.Name = "ItemLegenda_" .. texto
     item.Size = UDim2.new(1, 0, 0, 22)
@@ -110,13 +275,17 @@ local function criarItemLegenda(parent: Instance, texto: string, cor: Color3, or
     item.LayoutOrder = ordem
     item.Parent = parent
 
-    local amostra = Instance.new("Frame")
+    local amostra = Instance.new("TextLabel")
     amostra.Name = "Amostra"
     amostra.Size = UDim2.fromOffset(14, 14)
     amostra.Position = UDim2.fromOffset(0, 4)
     amostra.BackgroundColor3 = cor
     amostra.BorderSizePixel = 1
     amostra.BorderColor3 = Color3.fromRGB(30, 26, 22)
+    amostra.Font = Enum.Font.RobotoMono
+    amostra.Text = simbolo or ""
+    amostra.TextColor3 = Color3.fromRGB(30, 26, 22)
+    amostra.TextSize = Config.Map.MarkerTextSize
     amostra.Parent = item
 
     local label = Instance.new("TextLabel")
@@ -227,7 +396,7 @@ function MapUI.inicializar(grade: Grade): ()
     painelLegenda.Name = "Legenda"
     painelLegenda.AnchorPoint = Vector2.new(0, 0.5)
     painelLegenda.Position = UDim2.new(0, 30, 0.55, 0)
-    painelLegenda.Size = UDim2.fromOffset(180, 220)
+    painelLegenda.Size = UDim2.fromOffset(Config.Map.LegendWidth, Config.Map.LegendHeight)
     painelLegenda.BackgroundColor3 = Color3.fromRGB(26, 23, 20)
     painelLegenda.BorderSizePixel = 1
     painelLegenda.BorderColor3 = Color3.fromRGB(60, 52, 44)
@@ -261,6 +430,30 @@ function MapUI.inicializar(grade: Grade): ()
     criarItemLegenda(listaLegenda, "Gabinete", Config.Map.ZoneColors.Gabinete, 4)
     criarItemLegenda(listaLegenda, "Sala 214", Config.Map.ZoneColors.GoalRoom, 5)
     criarItemLegenda(listaLegenda, "Você", Config.Map.PlayerPinColor, 6)
+    criarItemLegenda(listaLegenda, "Pista", Config.Map.Markers.Clue.Color, 7, Config.Map.Markers.Clue.Symbol)
+    criarItemLegenda(
+        listaLegenda,
+        "Obstáculo",
+        Config.Map.Markers.Obstacle.Color,
+        8,
+        Config.Map.Markers.Obstacle.Symbol
+    )
+    criarItemLegenda(
+        listaLegenda,
+        "Checkpoint",
+        Config.Map.Markers.Checkpoint.Color,
+        9,
+        Config.Map.Markers.Checkpoint.Symbol
+    )
+    criarItemLegenda(
+        listaLegenda,
+        "Esconderijo",
+        Config.Map.Markers.HideSpot.Color,
+        10,
+        Config.Map.Markers.HideSpot.Symbol
+    )
+    criarItemLegenda(listaLegenda, "Faxineira", Config.Map.Markers.Janitor.Color, 11, Config.Map.Markers.Janitor.Symbol)
+    criarItemLegenda(listaLegenda, "Sala final", Config.Map.Markers.Goal.Color, 12, Config.Map.Markers.Goal.Symbol)
 
     -- Área Central Quadrada da Grade
     local areaGrade = Instance.new("Frame")
@@ -319,6 +512,15 @@ function MapUI.inicializar(grade: Grade): ()
         end
     end
 
+    local marcadores = Instance.new("Frame")
+    marcadores.Name = "Marcadores"
+    marcadores.Size = UDim2.fromScale(1, 1)
+    marcadores.BackgroundTransparency = 1
+    marcadores.BorderSizePixel = 0
+    marcadores.ZIndex = 4
+    marcadores.Parent = areaGrade
+    containerMarcadores = marcadores
+
     -- Pino indicador do jogador em tempo real
     local pino = Instance.new("Frame")
     pino.Name = "PinoJogador"
@@ -359,6 +561,26 @@ function MapUI.inicializar(grade: Grade): ()
     end)
 
     gui.Parent = playerGui
+
+    Remotes.obter("PistaColetadaCliente").OnClientEvent:Connect(function(pistaId: unknown)
+        if typeof(pistaId) == "string" then
+            local marcador = marcadoresPorPista[pistaId]
+            if marcador ~= nil then
+                for instancia, marcadorInstancia in marcadoresPorInstancia do
+                    if marcadorInstancia == marcador then
+                        removerMarcador(instancia)
+                        break
+                    end
+                end
+            end
+        end
+    end)
+
+    local mapaExistente = workspace:FindFirstChild("Labirinto")
+    if mapaExistente ~= nil then
+        observarMapa(mapaExistente)
+    end
+    workspace.ChildAdded:Connect(observarMapa)
 end
 
 return MapUI

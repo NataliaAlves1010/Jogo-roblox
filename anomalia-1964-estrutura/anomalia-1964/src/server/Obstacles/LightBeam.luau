@@ -25,6 +25,7 @@ function LightBeam.configurar(emissor: BasePart, destino: BasePart): ()
     assert(emissor ~= destino, "O emissor e o destino do feixe precisam ser diferentes")
     assert(barreirasPorEmissor[emissor] == nil, "O emissor já tem um feixe configurado")
 
+    emissor:SetAttribute("TipoObstaculo", "FeixeDeLuz")
     local deslocamento = destino.Position - emissor.Position
     assert(deslocamento.Magnitude > 0, "O destino do feixe precisa estar afastado do emissor")
 

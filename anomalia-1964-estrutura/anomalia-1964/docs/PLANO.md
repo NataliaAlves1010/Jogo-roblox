@@ -73,3 +73,6 @@ Conceito: cada pista coletada desaparece localmente para o jogador, emite alerta
 - [x] T51 Testes integrados: `tests/letters.spec.luau` e validação do fluxo completo no Studio
 
 Paralelizáveis: T40+T41, T46+T47. Execução recomendada na ordem sequencial da Fase 6 e Fase 7.
+
+## Fase 8 — Navegação detalhada
+- [x] T52 `client/MapUI.luau` + marcadores do servidor: exibir pistas, obstáculos, checkpoints, esconderijos, faxineiras e Sala 214 na tela do mapa, com legenda e ocultação local das pistas coletadas.
