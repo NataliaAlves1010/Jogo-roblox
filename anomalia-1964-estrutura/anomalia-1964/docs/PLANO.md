@@ -68,7 +68,7 @@ Conceito: cada pista coletada desaparece localmente para o jogador, emite alerta
 - [x] T46 `client/ClueToastUI.luau`: notificação rápida exibindo o trecho da carta recém-descoberta (sem travar controles do jogador)
 - [x] T47 `client/InventoryUI.luau`: aba Cartas no Diário com os trechos parciais reunidos em ordem cronológica (n/9)
 - [x] T48 `server/HelpRequest.luau`: validação e compilação da carta histórica completa para a Sala 214
-- [ ] T49 `client/HelpRequestUI.luau`: tela de leitura da carta final completa com os fatos históricos comprovados e tela de vitória
+- [x] T49 `client/HelpRequestUI.luau`: tela de leitura da carta final completa com os fatos históricos comprovados e tela de vitória
 - [ ] T50 `docs/CARTAS.md`: revisão pedagógica e fontes primárias históricas (tarefa humana)
 - [ ] T51 Testes integrados: `tests/letters.spec.luau` e validação do fluxo completo no Studio
 
