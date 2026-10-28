@@ -49,6 +49,11 @@ local config = {
         EndingPanelWidth = 420,
         EndingPanelHeight = 220,
         EndingButtonHeight = 40,
+        ClueToastWidth = 500,
+        ClueToastHeight = 112,
+        ClueToastTopOffset = 54,
+        ClueToastDuration = 5,
+        ClueToastFadeDuration = 0.3,
     },
     Map = {
         ToggleKey = Enum.KeyCode.M,

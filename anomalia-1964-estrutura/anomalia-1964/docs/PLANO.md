@@ -65,7 +65,7 @@ Conceito: cada pista coletada desaparece localmente para o jogador, emite alerta
 - [x] T43 `shared/Remotes.luau` + `shared/Types.luau`: remotes para ocultação de pistas no cliente, alerta acústico do guarda e envio de trechos
 - [x] T44 `server/Clues.luau` + `client/CluesClient.luau`: pista desaparece localmente para quem coletou e emite ruído na célula da pista
 - [x] T45 `server/Guard/StateMachine.luau` + `Config.luau`: guarda investiga ruído da pista imediatamente (`Suspeito`) e ganha velocidade e percepção progressivas por pista coletada
-- [ ] T46 `client/ClueToastUI.luau`: notificação rápida exibindo o trecho da carta recém-descoberta (sem travar controles do jogador)
+- [x] T46 `client/ClueToastUI.luau`: notificação rápida exibindo o trecho da carta recém-descoberta (sem travar controles do jogador)
 - [ ] T47 `client/InventoryUI.luau`: aba Cartas no Diário com os trechos parciais reunidos em ordem cronológica (n/9)
 - [ ] T48 `server/HelpRequest.luau`: validação e compilação da carta histórica completa para a Sala 214
 - [ ] T49 `client/HelpRequestUI.luau`: tela de leitura da carta final completa com os fatos históricos comprovados e tela de vitória
