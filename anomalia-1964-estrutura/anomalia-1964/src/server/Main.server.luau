@@ -28,6 +28,7 @@ local patrolModule = guardFolder:WaitForChild("Patrol") :: ModuleScript
 local visionModule = guardFolder:WaitForChild("Vision") :: ModuleScript
 local chaseModule = guardFolder:WaitForChild("Chase") :: ModuleScript
 local stateMachineModule = guardFolder:WaitForChild("StateMachine") :: ModuleScript
+local guardAnimationModule = guardFolder:WaitForChild("Animation") :: ModuleScript
 
 local Config = require(configModule)
 local Remotes = require(remotesModule)
@@ -49,6 +50,7 @@ local Patrol = require(patrolModule)
 local Vision = require(visionModule)
 local Chase = require(chaseModule)
 local StateMachine = require(stateMachineModule)
+local GuardAnimation = require(guardAnimationModule)
 
 local function montarMapa(seed: number): (Folder, { Zones.Zona }, Model)
     local labirintoExistente = workspace:FindFirstChild("Labirinto")
@@ -133,6 +135,7 @@ end
 
 local function iniciarControleDoGuarda(guarda: Model, mapa: Folder): ()
     Capture.inicializar(guarda)
+    GuardAnimation.inicializar(guarda)
     Patrol.iniciar(guarda, mapa)
     StateMachine.inicializar(guarda)
 

@@ -11,6 +11,7 @@ local player = Players.LocalPlayer
 local estadoAtual: EstadoAlerta = "calmo"
 local barra: Frame? = nil
 local textoEstado: TextLabel? = nil
+local textoPrisao: TextLabel? = nil
 local guardaAtivo: Model? = nil
 local conexoesGuardas: { [Model]: RBXScriptConnection } = {}
 local inicializado = false
@@ -18,9 +19,17 @@ local inicializado = false
 local function atualizarInterface(): ()
     local preenchimento = barra
     local estadoLabel = textoEstado
-    if preenchimento == nil or estadoLabel == nil then
+    local prisaoLabel = textoPrisao
+    if preenchimento == nil or estadoLabel == nil or prisaoLabel == nil then
         return
     end
+
+    local presoAte = player:GetAttribute("PresoAte")
+    local segundosRestantes = if typeof(presoAte) == "number"
+        then math.max(0, math.ceil(presoAte - Workspace:GetServerTimeNow()))
+        else 0
+    prisaoLabel.Visible = segundosRestantes > 0
+    prisaoLabel.Text = string.format("DETIDO — %ds", segundosRestantes)
 
     if estadoAtual == "calmo" then
         preenchimento.Size = UDim2.fromScale(0.2, 1)
@@ -121,7 +130,7 @@ local function criarInterface(): ()
     painel.Name = "Painel"
     painel.AnchorPoint = Vector2.new(0.5, 0)
     painel.Position = UDim2.new(0.5, 0, 0, 18)
-    painel.Size = UDim2.fromOffset(300, 66)
+    painel.Size = UDim2.fromOffset(300, 88)
     painel.BackgroundColor3 = Color3.fromRGB(24, 25, 29)
     painel.BackgroundTransparency = 0.12
     painel.BorderSizePixel = 0
@@ -177,6 +186,20 @@ local function criarInterface(): ()
     texto.Parent = painel
     textoEstado = texto
 
+    local detencao = Instance.new("TextLabel")
+    detencao.Name = "Detencao"
+    detencao.Position = UDim2.fromOffset(14, 57)
+    detencao.Size = UDim2.new(1, -28, 0, 18)
+    detencao.BackgroundTransparency = 1
+    detencao.Font = Enum.Font.GothamBold
+    detencao.Text = "DETIDO — 10s"
+    detencao.TextColor3 = Color3.fromRGB(235, 105, 90)
+    detencao.TextSize = 12
+    detencao.TextXAlignment = Enum.TextXAlignment.Center
+    detencao.Visible = false
+    detencao.Parent = painel
+    textoPrisao = detencao
+
     atualizarInterface()
 end
 
@@ -186,6 +209,13 @@ function AlertHUD.inicializar(): ()
     end
     inicializado = true
     criarInterface()
+
+    task.spawn(function()
+        while inicializado do
+            atualizarInterface()
+            task.wait(0.2)
+        end
+    end)
 
     for _, objeto in Workspace:GetDescendants() do
         conectarGuarda(objeto)

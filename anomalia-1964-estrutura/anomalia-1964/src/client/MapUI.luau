@@ -484,7 +484,7 @@ function MapUI.inicializar(grade: Grade): ()
     aspectGrade.DominantAxis = Enum.DominantAxis.Height
     aspectGrade.Parent = areaGrade
 
-    -- Constrói as 31x31 células
+    -- Constrói as 24x24 células
     local larguraCelula = 1 / grade.Colunas
     local alturaCelula = 1 / grade.Linhas
 

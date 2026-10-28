@@ -14,6 +14,7 @@ local Chase = {}
 
 type Controle = {
     Ativo: boolean,
+    UltimoDestino: Vector3?,
 }
 
 local controles: { [Model]: Controle } = {}
@@ -86,7 +87,7 @@ function Chase.iniciar(guarda: Model, alvo: Player): ()
 
     Chase.parar(guarda)
     humanoide.WalkSpeed = velocidade
-    local controle: Controle = { Ativo = true }
+    local controle: Controle = { Ativo = true, UltimoDestino = nil }
     controles[guarda] = controle
 
     task.spawn(function()
@@ -107,7 +108,14 @@ function Chase.iniciar(guarda: Model, alvo: Player): ()
 
             local proximaPosicao = calcularProximoPonto(guarda, raizGuarda, raizAlvo)
             if proximaPosicao ~= nil and controle.Ativo then
-                humanoide:MoveTo(proximaPosicao)
+                local ultimoDestino = controle.UltimoDestino
+                if
+                    ultimoDestino == nil
+                    or (proximaPosicao - ultimoDestino).Magnitude >= Config.GuardChase.WaypointChangeThreshold
+                then
+                    controle.UltimoDestino = proximaPosicao
+                    humanoide:MoveTo(proximaPosicao)
+                end
             end
 
             task.wait(Config.Timing.GuardRepathInterval)
