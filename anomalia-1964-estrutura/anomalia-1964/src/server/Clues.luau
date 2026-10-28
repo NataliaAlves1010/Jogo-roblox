@@ -15,6 +15,8 @@ local interactModule = script.Parent:WaitForChild("Interact") :: ModuleScript
 local zonesModule = script.Parent:WaitForChild("Zones") :: ModuleScript
 local Interact = require(interactModule)
 local Zones = require(zonesModule)
+local stateMachineModule = script.Parent:WaitForChild("Guard"):WaitForChild("StateMachine") :: ModuleScript
+local StateMachine = require(stateMachineModule)
 
 type Pista = ClueData.Pista
 type Zona = Zones.Zona
@@ -22,6 +24,7 @@ type Zona = Zones.Zona
 local Clues = {}
 local coletadasPorJogador: { [number]: { [string]: boolean } } = {}
 local inicializado = false
+local totalPistasColetadas = 0
 
 local function encontrarZona(zonas: { Zona }, nome: string): Zona?
     for _, zona in zonas do
@@ -80,6 +83,8 @@ local function criarPista(zona: Zona, pista: Pista, aoColetar: (Player, string) 
         end
 
         coletadas[pista.Id] = true
+        totalPistasColetadas += 1
+        StateMachine.atualizarAgressividade(totalPistasColetadas)
         Remotes.obter("PistaColetadaCliente"):FireClient(jogador, pista.Id)
         Clues.notificarRuido(pista.Celula, objeto.Position)
         aoColetar(jogador, pista.Id)
@@ -87,6 +92,7 @@ local function criarPista(zona: Zona, pista: Pista, aoColetar: (Player, string) 
 end
 
 function Clues.notificarRuido(celula: Vector2, posicao: Vector3): ()
+    StateMachine.investigarRuido(posicao)
     Remotes.obter("RuidoEmitido"):FireAllClients({
         Celula = celula,
         Posicao = posicao,
@@ -96,6 +102,8 @@ end
 function Clues.reiniciar(zonas: { Zona }, aoColetar: (Player, string) -> ()): ()
     assert(#zonas == Config.Zones.Count, "O número de zonas não corresponde à configuração")
     table.clear(coletadasPorJogador)
+    totalPistasColetadas = 0
+    StateMachine.atualizarAgressividade(totalPistasColetadas)
 
     local contagemPorZona: { [string]: number } = {}
     local ids: { [string]: boolean } = {}

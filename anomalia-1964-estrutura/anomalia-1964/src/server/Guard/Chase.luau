@@ -78,13 +78,14 @@ function Chase.iniciar(guarda: Model, alvo: Player): ()
     local raizGuarda = obterRaiz(guarda)
     assert(humanoide ~= nil, "O guarda precisa ter um Humanoid para perseguir")
     assert(raizGuarda ~= nil, "O guarda precisa ter uma raiz válida para perseguir")
-    assert(
-        Config.Movement.GuardWalkSpeed < Config.Movement.PlayerWalkSpeed,
-        "A velocidade do guarda precisa ser menor que a do jogador"
-    )
+    local velocidadeConfigurada = guarda:GetAttribute("VelocidadeAgressiva")
+    local velocidade = if typeof(velocidadeConfigurada) == "number"
+        then velocidadeConfigurada
+        else Config.Movement.GuardWalkSpeed
+    assert(velocidade < Config.Movement.PlayerWalkSpeed, "A velocidade do guarda precisa ser menor que a do jogador")
 
     Chase.parar(guarda)
-    humanoide.WalkSpeed = Config.Movement.GuardWalkSpeed
+    humanoide.WalkSpeed = velocidade
     local controle: Controle = { Ativo = true }
     controles[guarda] = controle
 

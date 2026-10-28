@@ -30,6 +30,12 @@ local config = {
         Range = 96,
         FieldOfViewDegrees = 90,
     },
+    GuardAggression = {
+        MaximumClues = 9,
+        WalkSpeedPerClue = 0.2,
+        MaximumWalkSpeed = 15.8,
+        VisionRangePerClue = 6,
+    },
     Obstacles = {
         LightBeamHeight = 8,
         LightBeamThickness = 0.5,

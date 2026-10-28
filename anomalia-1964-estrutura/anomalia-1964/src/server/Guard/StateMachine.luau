@@ -21,6 +21,8 @@ type Controle = {
 }
 
 local controles: { [Model]: Controle } = {}
+local velocidadeBase = Config.Movement.GuardWalkSpeed
+local alcanceBase = Config.GuardVision.Range
 
 local function alterarEstado(guarda: Model, controle: Controle, estado: Estado)
     if controle.Estado == estado then
@@ -94,6 +96,7 @@ function StateMachine.inicializar(guarda: Model): ()
     controles[guarda] = controle
     guarda:SetAttribute("EstadoGuarda", controle.Estado)
     guarda:SetAttribute("UltimoPontoVisto", nil)
+    guarda:SetAttribute("VelocidadeAgressiva", Config.Movement.GuardWalkSpeed)
 
     task.spawn(function()
         while controle.Ativo and guarda.Parent ~= nil and humanoide.Health > 0 do
@@ -135,6 +138,37 @@ function StateMachine.inicializar(guarda: Model): ()
             controles[guarda] = nil
         end
     end)
+end
+
+function StateMachine.investigarRuido(posicao: Vector3): ()
+    for guarda, controle in controles do
+        if controle.Ativo and guarda.Parent ~= nil then
+            controle.UltimoPontoVisto = posicao
+            controle.InicioBusca = nil
+            guarda:SetAttribute("UltimoPontoVisto", posicao)
+            alterarEstado(guarda, controle, "Suspeito")
+        end
+    end
+end
+
+function StateMachine.atualizarAgressividade(totalPistasColetadas: number): ()
+    local agressividade = Config.GuardAggression
+    local nivel = if totalPistasColetadas == totalPistasColetadas
+        then math.clamp(math.floor(totalPistasColetadas), 0, agressividade.MaximumClues)
+        else 0
+    local velocidade = math.min(velocidadeBase + nivel * agressividade.WalkSpeedPerClue, agressividade.MaximumWalkSpeed)
+    Config.Movement.GuardWalkSpeed = velocidade
+    Config.GuardVision.Range = alcanceBase + nivel * agressividade.VisionRangePerClue
+
+    for guarda, controle in controles do
+        if controle.Ativo and guarda.Parent ~= nil then
+            guarda:SetAttribute("VelocidadeAgressiva", velocidade)
+            local humanoide = guarda:FindFirstChildOfClass("Humanoid")
+            if humanoide ~= nil and humanoide.Health > 0 then
+                humanoide.WalkSpeed = velocidade
+            end
+        end
+    end
 end
 
 function StateMachine.obter(guarda: Model): Estado
