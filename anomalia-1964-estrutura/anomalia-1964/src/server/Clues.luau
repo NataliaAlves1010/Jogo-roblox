@@ -87,6 +87,11 @@ local function criarPista(zona: Zona, pista: Pista, aoColetar: (Player, string) 
         StateMachine.atualizarAgressividade(totalPistasColetadas)
         Remotes.obter("PistaColetadaCliente"):FireClient(jogador, pista.Id)
         Clues.notificarRuido(pista.Celula, objeto.Position)
+        Remotes.obter("TrechoRecebido"):FireClient(jogador, {
+            PistaId = pista.Id,
+            LetterId = pista.LetterId,
+            Trecho = pista.Trecho,
+        })
         aoColetar(jogador, pista.Id)
     end)
 end
