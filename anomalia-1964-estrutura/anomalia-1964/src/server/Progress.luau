@@ -10,12 +10,14 @@ local inventoryModule = script.Parent:WaitForChild("Inventory") :: ModuleScript
 local interactModule = script.Parent:WaitForChild("Interact") :: ModuleScript
 local obstaclesFolder = script.Parent:WaitForChild("Obstacles")
 local lockedDoorModule = obstaclesFolder:WaitForChild("LockedDoor") :: ModuleScript
+local helpRequestModule = script.Parent:WaitForChild("HelpRequest") :: ModuleScript
 
 local Config = require(configModule)
 local Remotes = require(remotesModule)
 local Inventory = require(inventoryModule)
 local Interact = require(interactModule)
 local LockedDoor = require(lockedDoorModule)
+local HelpRequest = require(helpRequestModule)
 
 local Progress = {}
 local portaAtual: BasePart? = nil
@@ -65,6 +67,10 @@ function Progress.concluir(jogador: Player): ()
         or conclusoes[jogador.UserId] == true
         or not jogadorNaSala(jogador)
     then
+        return
+    end
+
+    if HelpRequest.compilar(jogador) == nil then
         return
     end
 

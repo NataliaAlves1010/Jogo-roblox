@@ -21,6 +21,7 @@ local inventoryModule = serverFolder:WaitForChild("Inventory") :: ModuleScript
 local cluesModule = serverFolder:WaitForChild("Clues") :: ModuleScript
 local janitorModule = serverFolder:WaitForChild("Janitor") :: ModuleScript
 local progressModule = serverFolder:WaitForChild("Progress") :: ModuleScript
+local helpRequestModule = serverFolder:WaitForChild("HelpRequest") :: ModuleScript
 local playerMovementModule = serverFolder:WaitForChild("PlayerMovement") :: ModuleScript
 local spawnModule = guardFolder:WaitForChild("Spawn") :: ModuleScript
 local patrolModule = guardFolder:WaitForChild("Patrol") :: ModuleScript
@@ -41,6 +42,7 @@ local Inventory = require(inventoryModule)
 local Clues = require(cluesModule)
 local Janitor = require(janitorModule)
 local Progress = require(progressModule)
+local HelpRequest = require(helpRequestModule)
 local PlayerMovement = require(playerMovementModule)
 local GuardSpawn = require(spawnModule)
 local Patrol = require(patrolModule)
@@ -273,6 +275,7 @@ eventoReinicio.Event:Connect(function(_jogador: Player, novaSeed: number)
 end)
 
 Remotes.inicializar()
+HelpRequest.inicializar()
 Remotes.obter("SolicitarSprint").OnServerEvent:Connect(function(jogador: Player, ativo: unknown)
     if typeof(ativo) == "boolean" then
         PlayerMovement.validarSprint(jogador, ativo)

@@ -12,6 +12,7 @@ export type NomeRemoto =
     | "PistaColetadaCliente"
     | "RuidoEmitido"
     | "TrechoRecebido"
+    | "CartaCompletaAtualizada"
 
 export type NomeZona = "Recepção" | "Arquivo" | "Subsolo" | "Gabinete"
 
@@ -38,6 +39,21 @@ export type TrechoCarta = {
     PistaId: string,
     LetterId: string,
     Trecho: string,
+}
+
+export type ItemCartaHistorica = {
+    Id: string,
+    Zona: string,
+    Data: string,
+    Titulo: string,
+    Trecho: string,
+    Texto: string,
+    Fonte: string,
+}
+
+export type CartaHistorica = {
+    Trechos: { ItemCartaHistorica },
+    Total: number,
 }
 
 return {}

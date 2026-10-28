@@ -20,6 +20,7 @@ local NOMES_REMOTOS: { NomeRemoto } = {
     "PistaColetadaCliente",
     "RuidoEmitido",
     "TrechoRecebido",
+    "CartaCompletaAtualizada",
 }
 
 local REMOTOS_PERMITIDOS: { [string]: boolean } = {}
