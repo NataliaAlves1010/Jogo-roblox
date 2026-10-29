@@ -22,6 +22,7 @@ local MapUI = {}
 local guiAtual: ScreenGui? = nil
 local painelMapa: Frame? = nil
 local pinoJogador: Frame? = nil
+local pinoGuarda: TextLabel? = nil
 local containerGrade: Frame? = nil
 local containerMarcadores: Frame? = nil
 local conexaoRender: RBXScriptConnection? = nil
@@ -65,31 +66,37 @@ local function atualizarPosicaoJogador(): ()
     end
 
     local personagem = jogador.Character
-    if personagem == nil then
-        return
-    end
-
-    local raiz = personagem:FindFirstChild("HumanoidRootPart")
-    if raiz == nil or not raiz:IsA("BasePart") then
-        return
-    end
-
-    local posMundo = raiz.Position
     local configLabirinto = Config.Maze
     local tamanhoCelula = configLabirinto.CellSize
     local larguraTotal = gradeAtual.Colunas * tamanhoCelula
     local profundidadeTotal = gradeAtual.Linhas * tamanhoCelula
 
-    -- Converte coordenadas 3D do mundo para proporção [0, 1] no mapa
-    local normX = math.clamp((posMundo.X + larguraTotal / 2) / larguraTotal, 0, 1)
-    local normY = math.clamp((posMundo.Z + profundidadeTotal / 2) / profundidadeTotal, 0, 1)
+    local raizJogador = if personagem ~= nil then personagem:FindFirstChild("HumanoidRootPart") else nil
+    if raizJogador ~= nil and raizJogador:IsA("BasePart") then
+        local posicaoJogador = raizJogador.Position
+        local normX = math.clamp((posicaoJogador.X + larguraTotal / 2) / larguraTotal, 0, 1)
+        local normY = math.clamp((posicaoJogador.Z + profundidadeTotal / 2) / profundidadeTotal, 0, 1)
+        pinoJogador.Position = UDim2.fromScale(normX, normY)
 
-    pinoJogador.Position = UDim2.fromScale(normX, normY)
+        local vetorOlhar = raizJogador.CFrame.LookVector
+        pinoJogador.Rotation = math.deg(math.atan2(vetorOlhar.X, -vetorOlhar.Z))
+    end
 
-    -- Direção do olhar
-    local vetorOlhar = raiz.CFrame.LookVector
-    local anguloGraus = math.deg(math.atan2(vetorOlhar.X, -vetorOlhar.Z))
-    pinoJogador.Rotation = anguloGraus
+    local marcadorGuarda = pinoGuarda
+    local mapa = mapaObservado
+    local modeloGuarda = if mapa ~= nil then mapa:FindFirstChild("Guarda", true) else nil
+    local raizGuarda = if modeloGuarda ~= nil and modeloGuarda:IsA("Model")
+        then modeloGuarda:FindFirstChild("HumanoidRootPart")
+        else nil
+    if marcadorGuarda ~= nil and raizGuarda ~= nil and raizGuarda:IsA("BasePart") then
+        local posicaoGuarda = raizGuarda.Position
+        local normX = math.clamp((posicaoGuarda.X + larguraTotal / 2) / larguraTotal, 0, 1)
+        local normY = math.clamp((posicaoGuarda.Z + profundidadeTotal / 2) / profundidadeTotal, 0, 1)
+        marcadorGuarda.Position = UDim2.fromScale(normX, normY)
+        marcadorGuarda.Visible = true
+    elseif marcadorGuarda ~= nil then
+        marcadorGuarda.Visible = false
+    end
 end
 
 local function obterPosicaoNoMapa(posicao: Vector3): UDim2?
@@ -441,30 +448,31 @@ function MapUI.inicializar(grade: Grade): ()
     criarItemLegenda(listaLegenda, "Gabinete", Config.Map.ZoneColors.Gabinete, 4)
     criarItemLegenda(listaLegenda, "Sala 214", Config.Map.ZoneColors.GoalRoom, 5)
     criarItemLegenda(listaLegenda, "Você", Config.Map.PlayerPinColor, 6)
-    criarItemLegenda(listaLegenda, "Pista", Config.Map.Markers.Clue.Color, 7, Config.Map.Markers.Clue.Symbol)
+    criarItemLegenda(listaLegenda, "Guarda", Config.Map.Markers.Guard.Color, 7, Config.Map.Markers.Guard.Symbol)
+    criarItemLegenda(listaLegenda, "Pista", Config.Map.Markers.Clue.Color, 8, Config.Map.Markers.Clue.Symbol)
     criarItemLegenda(
         listaLegenda,
         "Obstáculo",
         Config.Map.Markers.Obstacle.Color,
-        8,
+        9,
         Config.Map.Markers.Obstacle.Symbol
     )
     criarItemLegenda(
         listaLegenda,
         "Checkpoint",
         Config.Map.Markers.Checkpoint.Color,
-        9,
+        10,
         Config.Map.Markers.Checkpoint.Symbol
     )
     criarItemLegenda(
         listaLegenda,
         "Esconderijo",
         Config.Map.Markers.HideSpot.Color,
-        10,
+        11,
         Config.Map.Markers.HideSpot.Symbol
     )
-    criarItemLegenda(listaLegenda, "Faxineira", Config.Map.Markers.Janitor.Color, 11, Config.Map.Markers.Janitor.Symbol)
-    criarItemLegenda(listaLegenda, "Sala final", Config.Map.Markers.Goal.Color, 12, Config.Map.Markers.Goal.Symbol)
+    criarItemLegenda(listaLegenda, "Faxineira", Config.Map.Markers.Janitor.Color, 12, Config.Map.Markers.Janitor.Symbol)
+    criarItemLegenda(listaLegenda, "Sala final", Config.Map.Markers.Goal.Color, 13, Config.Map.Markers.Goal.Symbol)
 
     -- Área Central Quadrada da Grade
     local areaGrade = Instance.new("Frame")
@@ -545,6 +553,26 @@ function MapUI.inicializar(grade: Grade): ()
     marcadores.ZIndex = 4
     marcadores.Parent = areaGrade
     containerMarcadores = marcadores
+
+    local marcadorGuarda = Instance.new("TextLabel")
+    marcadorGuarda.Name = "MarcadorGuarda"
+    marcadorGuarda.AnchorPoint = Vector2.new(0.5, 0.5)
+    marcadorGuarda.Size = UDim2.fromOffset(Config.Map.MarkerSize + 4, Config.Map.MarkerSize + 4)
+    marcadorGuarda.BackgroundColor3 = Config.Map.Markers.Guard.Color
+    marcadorGuarda.BorderColor3 = Color3.fromRGB(255, 245, 225)
+    marcadorGuarda.BorderSizePixel = 1
+    marcadorGuarda.Font = Enum.Font.RobotoMono
+    marcadorGuarda.Text = Config.Map.Markers.Guard.Symbol
+    marcadorGuarda.TextColor3 = Color3.fromRGB(255, 245, 225)
+    marcadorGuarda.TextSize = Config.Map.MarkerTextSize + 2
+    marcadorGuarda.ZIndex = 12
+    marcadorGuarda.Visible = false
+    marcadorGuarda.Parent = marcadores
+    pinoGuarda = marcadorGuarda
+
+    local cantoMarcadorGuarda = Instance.new("UICorner")
+    cantoMarcadorGuarda.CornerRadius = UDim.new(1, 0)
+    cantoMarcadorGuarda.Parent = marcadorGuarda
 
     -- Pino indicador do jogador em tempo real
     local pino = Instance.new("Frame")

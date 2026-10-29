@@ -4,8 +4,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local sharedFolder = ReplicatedStorage:WaitForChild("Shared")
 local mazeGridModule = sharedFolder:WaitForChild("MazeGrid") :: ModuleScript
 local configModule = sharedFolder:WaitForChild("Config") :: ModuleScript
+local collisionGroupsModule = script.Parent:WaitForChild("CollisionGroups") :: ModuleScript
 local MazeGrid = require(mazeGridModule)
 local Config = require(configModule)
+local CollisionGroups = require(collisionGroupsModule)
 
 local MazeBuilder = {}
 
@@ -20,10 +22,14 @@ local function criarPeca(folder: Folder, nome: string, tamanho: Vector3, posicao
     parte.Position = posicao
     parte.TopSurface = Enum.SurfaceType.Smooth
     parte.BottomSurface = Enum.SurfaceType.Smooth
+    if string.sub(nome, 1, 6) == "Parede" then
+        CollisionGroups.configurarParede(parte)
+    end
     parte.Parent = folder
 end
 
 function MazeBuilder.construir(grade: Grade, parent: Instance): Folder
+    CollisionGroups.inicializar()
     local configLabirinto = Config.Maze
     local tamanhoCelula = configLabirinto.CellSize
     local alturaParede = configLabirinto.WallHeight

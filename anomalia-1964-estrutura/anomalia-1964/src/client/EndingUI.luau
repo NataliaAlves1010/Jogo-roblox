@@ -25,10 +25,14 @@ function EndingUI.exibir(tempoSegundos: number): ()
     end
 
     local painel = gui:FindFirstChild("Painel")
+    local titulo = if painel ~= nil then painel:FindFirstChild("Titulo") else nil
     local tempo = if painel ~= nil then painel:FindFirstChild("Tempo") else nil
     local reiniciar = if painel ~= nil then painel:FindFirstChild("Reiniciar") else nil
     if tempo ~= nil and tempo:IsA("TextLabel") then
         tempo.Text = formatarTempo(tempoSegundos)
+    end
+    if titulo ~= nil and titulo:IsA("TextLabel") then
+        titulo.Text = "Investigação concluída"
     end
     if reiniciar ~= nil and reiniciar:IsA("TextButton") then
         reiniciar.Active = true
@@ -67,7 +71,7 @@ function EndingUI.inicializar(): ()
     titulo.Size = UDim2.new(1, -40, 0, 56)
     titulo.BackgroundTransparency = 1
     titulo.Font = Enum.Font.Garamond
-    titulo.Text = "Você chegou à Sala 214"
+    titulo.Text = "Investigação concluída"
     titulo.TextColor3 = Color3.fromRGB(230, 218, 190)
     titulo.TextScaled = true
     titulo.Parent = painel
@@ -82,6 +86,18 @@ function EndingUI.inicializar(): ()
     tempo.TextColor3 = Color3.fromRGB(230, 218, 190)
     tempo.TextScaled = true
     tempo.Parent = painel
+
+    local mensagemFinal = Instance.new("TextLabel")
+    mensagemFinal.Name = "MensagemFinal"
+    mensagemFinal.Position = UDim2.fromOffset(20, Config.UI.EndingMessageTop)
+    mensagemFinal.Size = UDim2.new(1, -40, 0, Config.UI.EndingMessageHeight)
+    mensagemFinal.BackgroundTransparency = 1
+    mensagemFinal.Font = Enum.Font.Garamond
+    mensagemFinal.Text = "Os documentos foram reunidos. A memória continua."
+    mensagemFinal.TextColor3 = Color3.fromRGB(219, 205, 174)
+    mensagemFinal.TextSize = Config.UI.EndingMessageTextSize
+    mensagemFinal.TextWrapped = true
+    mensagemFinal.Parent = painel
 
     local reiniciar = Instance.new("TextButton")
     reiniciar.Name = "Reiniciar"

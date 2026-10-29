@@ -16,6 +16,7 @@ local zonesModule = serverFolder:WaitForChild("Zones") :: ModuleScript
 local checkpointsModule = serverFolder:WaitForChild("Checkpoints") :: ModuleScript
 local goalRoomModule = serverFolder:WaitForChild("GoalRoom") :: ModuleScript
 local hideSpotsModule = serverFolder:WaitForChild("HideSpots") :: ModuleScript
+local collisionGroupsModule = serverFolder:WaitForChild("CollisionGroups") :: ModuleScript
 local captureModule = serverFolder:WaitForChild("Capture") :: ModuleScript
 local inventoryModule = serverFolder:WaitForChild("Inventory") :: ModuleScript
 local cluesModule = serverFolder:WaitForChild("Clues") :: ModuleScript
@@ -38,6 +39,7 @@ local Zones = require(zonesModule)
 local Checkpoints = require(checkpointsModule)
 local GoalRoom = require(goalRoomModule)
 local HideSpots = require(hideSpotsModule)
+local CollisionGroups = require(collisionGroupsModule)
 local Capture = require(captureModule)
 local Inventory = require(inventoryModule)
 local Clues = require(cluesModule)
@@ -142,6 +144,15 @@ local function iniciarControleDoGuarda(guarda: Model, mapa: Folder): ()
     local estadoAnterior = "Patrulha"
     local alvoAtual: Player? = nil
     local tokenBusca = 0
+    local alvoPerseguicaoUserId: number? = nil
+
+    local function definirAlvoPerseguicao(userId: number?): ()
+        if alvoPerseguicaoUserId == userId then
+            return
+        end
+        alvoPerseguicaoUserId = userId
+        guarda:SetAttribute("AlvoPerseguicaoUserId", userId)
+    end
 
     task.spawn(function()
         while guarda.Parent ~= nil do
@@ -151,18 +162,21 @@ local function iniciarControleDoGuarda(guarda: Model, mapa: Folder): ()
             end
 
             if estado == "Patrulha" then
+                definirAlvoPerseguicao(nil)
                 Chase.parar(guarda)
                 alvoAtual = nil
                 if estadoAnterior ~= "Patrulha" then
                     Patrol.iniciar(guarda, mapa)
                 end
             elseif estado == "Suspeito" then
+                definirAlvoPerseguicao(nil)
                 Patrol.parar(guarda)
                 Chase.parar(guarda)
                 alvoAtual = nil
             elseif estado == "Perseguição" then
                 Patrol.parar(guarda)
                 local alvo = obterJogadorVisivel(guarda)
+                definirAlvoPerseguicao(if alvo ~= nil then alvo.UserId else nil)
                 if alvo ~= nil and alvo ~= alvoAtual then
                     Chase.iniciar(guarda, alvo)
                     alvoAtual = alvo
@@ -171,6 +185,7 @@ local function iniciarControleDoGuarda(guarda: Model, mapa: Folder): ()
                     alvoAtual = nil
                 end
             elseif estado == "Busca" then
+                definirAlvoPerseguicao(nil)
                 Chase.parar(guarda)
                 alvoAtual = nil
                 if estadoAnterior ~= "Busca" then
@@ -193,6 +208,7 @@ local function iniciarControleDoGuarda(guarda: Model, mapa: Folder): ()
 
         Chase.parar(guarda)
         Patrol.parar(guarda)
+        definirAlvoPerseguicao(nil)
         tokenBusca += 1
     end)
 end
@@ -233,10 +249,12 @@ end
 
 local function aoColetarPista(jogador: Player, pistaId: string): ()
     Inventory.adicionarPista(jogador, pistaId)
+    Progress.concluirAoReunirPistas(jogador)
 end
 
 local function iniciarPartida(seed: number, primeiroInicio: boolean): ()
     local mapa, zonas, sala = montarMapa(seed)
+    Progress.inicializar(sala)
     if primeiroInicio then
         Inventory.inicializar()
         Checkpoints.inicializar(zonas)
@@ -250,8 +268,6 @@ local function iniciarPartida(seed: number, primeiroInicio: boolean): ()
         Clues.reiniciar(zonas, aoColetarPista)
         Janitor.reiniciar(zonas)
     end
-    Progress.inicializar(sala)
-
     local zonaInicial = zonas[1]
     assert(zonaInicial ~= nil, "A primeira zona do labirinto precisa existir")
     local guarda = GuardSpawn.criar(zonaInicial)
@@ -287,6 +303,7 @@ eventoReinicio.Event:Connect(function(_jogador: Player, novaSeed: number)
 end)
 
 Remotes.inicializar()
+CollisionGroups.inicializar()
 HelpRequest.inicializar()
 Remotes.obter("SolicitarSprint").OnServerEvent:Connect(function(jogador: Player, ativo: unknown)
     if typeof(ativo) == "boolean" then

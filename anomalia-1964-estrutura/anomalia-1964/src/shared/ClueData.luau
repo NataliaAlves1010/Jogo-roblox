@@ -43,7 +43,7 @@ local pistas: { Pista } = {
     {
         Id = "memorando_214",
         Zona = "Arquivo",
-        Celula = Vector2.new(11, 27),
+        Celula = Vector2.new(11, 22),
         Texto = "Um memorando menciona movimentação de documentos na Sala 214.",
         LetterId = "C04",
         Trecho = "Tonho, agora só existe um partido do governo e um da oposição. Os outros foram extintos por decreto.",
@@ -67,7 +67,7 @@ local pistas: { Pista } = {
     {
         Id = "lista_manutencao",
         Zona = "Subsolo",
-        Celula = Vector2.new(27, 11),
+        Celula = Vector2.new(22, 11),
         Texto = "A lista de manutenção confirma que o duto leva ao corredor do Gabinete.",
         LetterId = "C07",
         Trecho = "Tonho, a Comissão da Verdade confirmou 434 mortos e desaparecidos. Duzentos e dez ainda não foram encontrados.",
@@ -83,7 +83,7 @@ local pistas: { Pista } = {
     {
         Id = "telegrama_abril",
         Zona = "Gabinete",
-        Celula = Vector2.new(29, 29),
+        Celula = Vector2.new(22, 22),
         Texto = "O telegrama confirma que a ordem chegou a Brasília em abril de 1964.",
         LetterId = "C09",
         Trecho = "Tonho, a Lei da Anistia passou. Alguns voltaram. O debate sobre quem ela protege ainda não acabou.",

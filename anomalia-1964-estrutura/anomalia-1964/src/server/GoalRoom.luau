@@ -4,8 +4,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local sharedFolder = ReplicatedStorage:WaitForChild("Shared")
 local mazeGridModule = sharedFolder:WaitForChild("MazeGrid") :: ModuleScript
 local configModule = sharedFolder:WaitForChild("Config") :: ModuleScript
+local collisionGroupsModule = script.Parent:WaitForChild("CollisionGroups") :: ModuleScript
 local MazeGrid = require(mazeGridModule)
 local Config = require(configModule)
+local CollisionGroups = require(collisionGroupsModule)
 
 local GoalRoom = {}
 
@@ -29,6 +31,9 @@ local function criarPeca(
     parte.Color = cor
     parte.TopSurface = Enum.SurfaceType.Smooth
     parte.BottomSurface = Enum.SurfaceType.Smooth
+    if string.sub(nome, 1, 6) == "Parede" or nome == "VergaEntrada" then
+        CollisionGroups.configurarParede(parte)
+    end
     parte.Parent = modelo
     return parte
 end

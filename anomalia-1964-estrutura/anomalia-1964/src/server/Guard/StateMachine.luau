@@ -34,10 +34,18 @@ local function alterarEstado(guarda: Model, controle: Controle, estado: Estado)
 
     if estado == "Busca" then
         controle.InicioBusca = os.clock()
+        local humanoide = guarda:FindFirstChildOfClass("Humanoid")
+        if humanoide ~= nil and humanoide.Health > 0 then
+            humanoide.WalkSpeed = Config.GuardInvestigation.WalkSpeed
+        end
     elseif estado == "Patrulha" then
         controle.InicioBusca = nil
         controle.UltimoPontoVisto = nil
         guarda:SetAttribute("UltimoPontoVisto", nil)
+        local humanoide = guarda:FindFirstChildOfClass("Humanoid")
+        if humanoide ~= nil and humanoide.Health > 0 then
+            humanoide.WalkSpeed = Config.Movement.GuardWalkSpeed
+        end
     end
 end
 
@@ -103,31 +111,9 @@ function StateMachine.inicializar(guarda: Model): ()
             local jogadorVisivel = obterJogadorVisivel(guarda)
             if jogadorVisivel ~= nil then
                 registrarPontoVisto(guarda, controle, jogadorVisivel)
-            end
-
-            if controle.Estado == "Patrulha" then
-                if jogadorVisivel ~= nil then
-                    alterarEstado(guarda, controle, "Suspeito")
-                end
-            elseif controle.Estado == "Suspeito" then
-                if jogadorVisivel ~= nil then
-                    alterarEstado(guarda, controle, "Perseguição")
-                else
-                    alterarEstado(guarda, controle, "Busca")
-                end
-            elseif controle.Estado == "Perseguição" then
-                if jogadorVisivel == nil then
-                    alterarEstado(guarda, controle, "Busca")
-                end
-            elseif controle.Estado == "Busca" then
-                if jogadorVisivel ~= nil then
-                    alterarEstado(guarda, controle, "Suspeito")
-                elseif
-                    controle.InicioBusca ~= nil
-                    and os.clock() - controle.InicioBusca >= Config.Timing.GuardSearchDuration
-                then
-                    alterarEstado(guarda, controle, "Patrulha")
-                end
+                alterarEstado(guarda, controle, "Perseguição")
+            else
+                alterarEstado(guarda, controle, "Patrulha")
             end
 
             task.wait(Config.Timing.GuardRepathInterval)
@@ -144,9 +130,7 @@ function StateMachine.investigarRuido(posicao: Vector3): ()
     for guarda, controle in controles do
         if controle.Ativo and guarda.Parent ~= nil then
             controle.UltimoPontoVisto = posicao
-            controle.InicioBusca = nil
             guarda:SetAttribute("UltimoPontoVisto", posicao)
-            alterarEstado(guarda, controle, "Suspeito")
         end
     end
 end

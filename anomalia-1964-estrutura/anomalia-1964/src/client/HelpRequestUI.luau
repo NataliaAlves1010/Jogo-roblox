@@ -167,7 +167,11 @@ function HelpRequestUI.exibir(carta: CartaHistorica): ()
     if subtitulo ~= nil then
         local cabecalho = subtitulo:FindFirstChild("Subtitulo")
         if cabecalho ~= nil and cabecalho:IsA("TextLabel") then
-            cabecalho.Text = `Documento reunido: {carta.Total}/{carta.Total} trechos • conclusão da investigação`
+            cabecalho.Text = string.format(
+                "Documento reunido: %d/%d trechos • investigação concluída\nPergunta: por que preservar a memória histórica importa?",
+                carta.Total,
+                carta.Total
+            )
         end
     end
 
@@ -230,6 +234,8 @@ function HelpRequestUI.inicializar(): ()
     subtitulo.TextColor3 = Color3.fromRGB(183, 174, 152)
     subtitulo.TextSize = ui.FinalLetterSubtitleTextSize
     subtitulo.TextXAlignment = Enum.TextXAlignment.Left
+    subtitulo.TextYAlignment = Enum.TextYAlignment.Center
+    subtitulo.TextWrapped = true
     subtitulo.Parent = painel
 
     local fechar = Instance.new("TextButton")
