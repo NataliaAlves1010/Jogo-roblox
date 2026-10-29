@@ -11,6 +11,7 @@ local Config = require(configModule)
 local MazeGrid = require(mazeGridModule)
 
 local AlertHUD = require(script.Parent:WaitForChild("AlertHUD") :: ModuleScript)
+local PursuitEffects = require(script.Parent:WaitForChild("PursuitEffects") :: ModuleScript)
 local InventoryUI = require(script.Parent:WaitForChild("InventoryUI") :: ModuleScript)
 local DialogueUI = require(script.Parent:WaitForChild("DialogueUI") :: ModuleScript)
 local EndingUI = require(script.Parent:WaitForChild("EndingUI") :: ModuleScript)
@@ -109,6 +110,7 @@ local function obterGradeDoMundo(): MazeGrid.Grade
 end
 
 AlertHUD.inicializar()
+PursuitEffects.inicializar()
 InventoryUI.inicializar()
 DialogueUI.inicializar()
 EndingUI.inicializar()

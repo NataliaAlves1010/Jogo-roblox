@@ -5,13 +5,11 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local sharedFolder = ReplicatedStorage:WaitForChild("Shared")
 local clueDataModule = sharedFolder:WaitForChild("ClueData") :: ModuleScript
-local configModule = sharedFolder:WaitForChild("Config") :: ModuleScript
 local letterDataModule = sharedFolder:WaitForChild("LetterData") :: ModuleScript
 local remotesModule = sharedFolder:WaitForChild("Remotes") :: ModuleScript
 local typesModule = sharedFolder:WaitForChild("Types") :: ModuleScript
 local inventoryModule = script.Parent:WaitForChild("Inventory") :: ModuleScript
 local ClueData = require(clueDataModule)
-local Config = require(configModule)
 local LetterData = require(letterDataModule)
 local Remotes = require(remotesModule)
 local Types = require(typesModule)
@@ -23,34 +21,6 @@ type ItemCartaHistorica = Types.ItemCartaHistorica
 local HelpRequest = {}
 local inicializado = false
 local remotoCartaCompleta: RemoteEvent? = nil
-
-local function jogadorNaSala(jogador: Player): boolean
-    local personagem = jogador.Character
-    local raiz = if personagem ~= nil then personagem:FindFirstChild("HumanoidRootPart") else nil
-    local mapa = workspace:FindFirstChild("Labirinto")
-    local sala = if mapa ~= nil then mapa:FindFirstChild("Sala 214") else nil
-    local porta = if sala ~= nil and sala:IsA("Model") then sala.PrimaryPart else nil
-    local piso = if sala ~= nil then sala:FindFirstChild("Piso") else nil
-    if
-        jogador.Parent ~= Players
-        or raiz == nil
-        or not raiz:IsA("BasePart")
-        or porta == nil
-        or porta:GetAttribute("PortaFinal") ~= true
-        or porta:GetAttribute("Aberta") ~= true
-        or piso == nil
-        or not piso:IsA("BasePart")
-    then
-        return false
-    end
-
-    local localizacao = piso.CFrame:PointToObjectSpace(raiz.Position)
-    local meiaCelula = Config.Maze.CellSize / 2
-    return math.abs(localizacao.X) <= meiaCelula
-        and math.abs(localizacao.Z) <= meiaCelula
-        and localizacao.Y >= 0
-        and localizacao.Y <= Config.Maze.WallHeight
-end
 
 local function valorData(data: string): number
     local diaTexto, mesTexto, anoTexto = string.match(data, "^(%d%d)/(%d%d)/(%d%d%d%d)$")
@@ -73,7 +43,7 @@ end
 
 function HelpRequest.compilar(jogador: Player): CartaHistorica?
     local remoto = remotoCartaCompleta
-    if not inicializado or remoto == nil or not jogadorNaSala(jogador) then
+    if not inicializado or remoto == nil or jogador.Parent ~= Players then
         return nil
     end
 

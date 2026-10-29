@@ -58,25 +58,39 @@ function Progress.validarEntrada(jogador: Player): boolean
     return Inventory.quantidadePistas(jogador) >= configProgresso.MinimumClues
 end
 
+local function registrarConclusao(jogador: Player): ()
+    if jogador.Parent ~= Players or conclusoes[jogador.UserId] == true then
+        return
+    end
+
+    conclusoes[jogador.UserId] = true
+    if HelpRequest.compilar(jogador) == nil then
+        warn("A partida foi concluída, mas a carta histórica não pôde ser montada.")
+    end
+    local tempoSegundos = math.max(0, math.floor(os.clock() - inicioPartida))
+    Remotes.obter("VitoriaAtualizada"):FireClient(jogador, tempoSegundos)
+end
+
+function Progress.concluirAoReunirPistas(jogador: Player): ()
+    if jogador.Parent ~= Players or Inventory.quantidadePistas(jogador) < Config.Progress.MinimumClues then
+        return
+    end
+
+    registrarConclusao(jogador)
+end
+
 function Progress.concluir(jogador: Player): ()
     local porta = portaAtual
     if
         jogador.Parent ~= Players
         or porta == nil
         or porta:GetAttribute("Aberta") ~= true
-        or conclusoes[jogador.UserId] == true
         or not jogadorNaSala(jogador)
     then
         return
     end
 
-    if HelpRequest.compilar(jogador) == nil then
-        return
-    end
-
-    conclusoes[jogador.UserId] = true
-    local tempoSegundos = math.max(0, math.floor(os.clock() - inicioPartida))
-    Remotes.obter("VitoriaAtualizada"):FireClient(jogador, tempoSegundos)
+    registrarConclusao(jogador)
 end
 
 function Progress.reiniciarMapa(jogador: Player): boolean
