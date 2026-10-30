@@ -28,6 +28,7 @@ function EndingUI.exibir(tempoSegundos: number): ()
     local titulo = if painel ~= nil then painel:FindFirstChild("Titulo") else nil
     local tempo = if painel ~= nil then painel:FindFirstChild("Tempo") else nil
     local reiniciar = if painel ~= nil then painel:FindFirstChild("Reiniciar") else nil
+    local sair = if painel ~= nil then painel:FindFirstChild("Sair") else nil
     if tempo ~= nil and tempo:IsA("TextLabel") then
         tempo.Text = formatarTempo(tempoSegundos)
     end
@@ -37,6 +38,10 @@ function EndingUI.exibir(tempoSegundos: number): ()
     if reiniciar ~= nil and reiniciar:IsA("TextButton") then
         reiniciar.Active = true
         reiniciar.Text = "Jogar novamente"
+    end
+    if sair ~= nil and sair:IsA("TextButton") then
+        sair.Active = true
+        sair.Text = "Sair do jogo"
     end
     gui.Enabled = true
 end
@@ -101,9 +106,14 @@ function EndingUI.inicializar(): ()
 
     local reiniciar = Instance.new("TextButton")
     reiniciar.Name = "Reiniciar"
-    reiniciar.AnchorPoint = Vector2.new(0.5, 1)
-    reiniciar.Position = UDim2.new(0.5, 0, 1, -18)
-    reiniciar.Size = UDim2.new(1, -40, 0, Config.UI.EndingButtonHeight)
+    reiniciar.AnchorPoint = Vector2.new(1, 1)
+    reiniciar.Position = UDim2.new(0.5, -Config.UI.EndingButtonGap / 2, 1, -18)
+    reiniciar.Size = UDim2.new(
+        0.5,
+        -(Config.UI.EndingButtonSideInset + Config.UI.EndingButtonGap / 2),
+        0,
+        Config.UI.EndingButtonHeight
+    )
     reiniciar.BackgroundColor3 = Color3.fromRGB(112, 82, 52)
     reiniciar.BorderSizePixel = 0
     reiniciar.Font = Enum.Font.Garamond
@@ -116,6 +126,29 @@ function EndingUI.inicializar(): ()
         reiniciar.Text = "Preparando nova partida..."
         gui.Enabled = false
         Remotes.obter("SolicitarReinicio"):FireServer()
+    end)
+
+    local sair = Instance.new("TextButton")
+    sair.Name = "Sair"
+    sair.AnchorPoint = Vector2.new(0, 1)
+    sair.Position = UDim2.new(0.5, Config.UI.EndingButtonGap / 2, 1, -18)
+    sair.Size = UDim2.new(
+        0.5,
+        -(Config.UI.EndingButtonSideInset + Config.UI.EndingButtonGap / 2),
+        0,
+        Config.UI.EndingButtonHeight
+    )
+    sair.BackgroundColor3 = Color3.fromRGB(82, 55, 50)
+    sair.BorderSizePixel = 0
+    sair.Font = Enum.Font.Garamond
+    sair.Text = "Sair do jogo"
+    sair.TextColor3 = Color3.fromRGB(255, 245, 225)
+    sair.TextScaled = true
+    sair.Parent = painel
+    sair.Activated:Connect(function()
+        sair.Active = false
+        sair.Text = "Saindo do jogo..."
+        jogador:Kick("Você encerrou a partida. Obrigado por jogar!")
     end)
 
     painel.Parent = gui
